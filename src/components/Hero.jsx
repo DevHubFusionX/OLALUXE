@@ -1,6 +1,7 @@
 import React from 'react';
 import { FaWhatsapp, FaGem, FaShippingFast, FaCrown } from 'react-icons/fa';
-import heroImage from '../assets/moderate_textile.jpg';
+// import heroImage from '../assets/moderate_textile.jpg';
+const heroImage = "https://images.unsplash.com/photo-1601121141461-9d6647bca1ed?q=80&w=2000&auto=format&fit=crop";
 
 const Hero = () => {
   return (
