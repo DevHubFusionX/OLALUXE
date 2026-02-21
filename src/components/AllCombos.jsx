@@ -46,13 +46,13 @@ const AllCombos = () => {
       setLoading(false);
     }
   };
-  
+
   useEffect(() => {
-    let filtered = combos.filter(combo => 
+    let filtered = combos.filter(combo =>
       combo.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       (combo.description && combo.description.toLowerCase().includes(searchTerm.toLowerCase()))
     );
-    
+
     filtered.sort((a, b) => {
       switch (sortBy) {
         case 'popular':
@@ -67,7 +67,7 @@ const AllCombos = () => {
           return new Date(b.createdAt) - new Date(a.createdAt);
       }
     });
-    
+
     setFilteredCombos(filtered);
   }, [combos, searchTerm, sortBy]);
 
@@ -78,31 +78,29 @@ const AllCombos = () => {
           <div className="container mx-auto px-6 py-6">
             <div className="flex items-center justify-between">
               <div>
-                <h1 className="text-3xl font-bold text-gray-800">Best Combos</h1>
-                <p className="text-gray-600">Save more with our curated combo deals</p>
+                <h1 className="text-3xl font-serif font-bold text-gray-900 mb-2">Exquisite Sets</h1>
+                <p className="text-gray-600 italic">Curated luxury pairings for a complete look</p>
               </div>
               <div className="flex items-center space-x-2">
                 <button
                   onClick={() => setViewMode('grid')}
-                  className={`p-2 rounded-lg transition-colors ${
-                    viewMode === 'grid' ? 'bg-green-100 text-green-600' : 'text-gray-400 hover:text-gray-600'
-                  }`}
+                  className={`p-2 rounded-lg transition-colors ${viewMode === 'grid' ? 'bg-peach-100 text-gray-900' : 'text-gray-400 hover:text-gray-600'
+                    }`}
                 >
-                  <FaTh />
+                  <FaTh size={18} />
                 </button>
                 <button
                   onClick={() => setViewMode('list')}
-                  className={`p-2 rounded-lg transition-colors ${
-                    viewMode === 'list' ? 'bg-green-100 text-green-600' : 'text-gray-400 hover:text-gray-600'
-                  }`}
+                  className={`p-2 rounded-lg transition-colors ${viewMode === 'list' ? 'bg-peach-100 text-gray-900' : 'text-gray-400 hover:text-gray-600'
+                    }`}
                 >
-                  <FaList />
+                  <FaList size={18} />
                 </button>
               </div>
             </div>
           </div>
         </div>
-        
+
         <div className="container mx-auto px-6 pb-8">
           <div className="bg-white rounded-2xl shadow-sm p-6 mb-8">
             <div className="grid md:grid-cols-3 gap-4">
@@ -110,50 +108,48 @@ const AllCombos = () => {
                 <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
                 <input
                   type="text"
-                  placeholder="Search combos..."
+                  placeholder="Search collections..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                  className="w-full pl-10 pr-4 py-3 border border-peach-100 rounded-xl focus:ring-2 focus:ring-peach-200 focus:border-transparent outline-none"
                 />
               </div>
-              
+
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
-                className="px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                className="px-4 py-3 border border-peach-100 rounded-xl focus:ring-2 focus:ring-peach-200 focus:border-transparent cursor-pointer outline-none"
               >
                 <option value="popular">Most Popular</option>
                 <option value="savings-high">Highest Savings</option>
                 <option value="price-low">Price: Low to High</option>
                 <option value="name">Name A-Z</option>
               </select>
-              
-              <div className="flex items-center justify-center bg-green-50 rounded-xl px-4 py-3">
-                <span className="text-green-700 font-medium">
-                  {filteredCombos.length} {filteredCombos.length === 1 ? 'Combo' : 'Combos'}
+
+              <div className="flex items-center justify-center bg-peach-50/50 border border-peach-100 rounded-xl px-4 py-3">
+                <span className="text-gray-700 font-bold text-sm tracking-widest uppercase">
+                  {filteredCombos.length} {filteredCombos.length === 1 ? 'Pairing' : 'Pairings'}
                 </span>
               </div>
             </div>
           </div>
 
           {loading ? (
-            <div className={`grid gap-6 ${
-              viewMode === 'grid' 
-                ? 'md:grid-cols-2 lg:grid-cols-3' 
+            <div className={`grid gap-6 ${viewMode === 'grid'
+                ? 'md:grid-cols-2 lg:grid-cols-3'
                 : 'grid-cols-1 max-w-4xl mx-auto'
-            }`}>
+              }`}>
               {[...Array(6)].map((_, index) => (
                 <ProductSkeleton key={index} />
               ))}
             </div>
           ) : (
-            <div className={`grid gap-6 ${
-              viewMode === 'grid' 
-                ? 'md:grid-cols-2 lg:grid-cols-3' 
+            <div className={`grid gap-6 ${viewMode === 'grid'
+                ? 'md:grid-cols-2 lg:grid-cols-3'
                 : 'grid-cols-1 max-w-4xl mx-auto'
-            }`}>
+              }`}>
               {filteredCombos.map((combo, index) => (
-                <div 
+                <div
                   key={combo._id}
                   className="animate-fade-in-up"
                   style={{ animationDelay: `${index * 50}ms` }}
@@ -177,7 +173,7 @@ const AllCombos = () => {
                     setSearchTerm('');
                     setSortBy('popular');
                   }}
-                  className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-xl font-semibold transition-colors"
+                  className="bg-gray-900 hover:bg-black text-white px-8 py-3 rounded-full font-semibold transition-all shadow-lg"
                 >
                   Clear Filters
                 </button>

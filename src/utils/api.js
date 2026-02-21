@@ -2,6 +2,7 @@ const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://moderate-textile.o
 
 export const API_ENDPOINTS = {
   products: `${API_BASE_URL}/api/products`,
+  orders: `${API_BASE_URL}/api/orders`,
   combos: `${API_BASE_URL}/api/combos`,
   admin: {
     login: `${API_BASE_URL}/api/admin/login`,

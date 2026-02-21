@@ -20,7 +20,7 @@ const AdminPanel = ({ onLogout }) => {
   const [editingId, setEditingId] = useState(null);
   const [showAddForm, setShowAddForm] = useState(false);
   const [formData, setFormData] = useState({ name: '', price: '', category: '', description: '', fabricType: '', texture: '', quality: '', care: '', images: [] });
-  const [comboFormData, setComboFormData] = useState({ name: '', description: '', products: [], originalPrice: '', comboPrice: '', savings: '', images: [], popular: false });
+  const [comboFormData, setComboFormData] = useState({ name: '', description: '', products: [], originalPrice: '', comboPrice: '', savings: '', images: [], existingImages: [], popular: false });
   const [editingComboId, setEditingComboId] = useState(null);
   const [deletingComboId, setDeletingComboId] = useState(null);
   const [showComboPreview, setShowComboPreview] = useState(false);
@@ -73,22 +73,22 @@ const AdminPanel = ({ onLogout }) => {
     setLoading(true);
 
     try {
-      const url = editingId 
+      const url = editingId
         ? `${API_ENDPOINTS.admin.products}/${editingId}`
         : API_ENDPOINTS.admin.products;
       const method = editingId ? 'PUT' : 'POST';
-      
-      const response = await fetch(url, { 
-        method, 
+
+      const response = await fetch(url, {
+        method,
         headers: getAuthHeaders(),
-        body: formDataToSend 
+        body: formDataToSend
       });
-      
+
       if (response.status === 401) {
         onLogout();
         return;
       }
-      
+
       // Clear cache to ensure frontend updates immediately
       cache.clear('products');
       fetchProducts();
@@ -103,16 +103,16 @@ const AdminPanel = ({ onLogout }) => {
   };
 
   const handleEdit = (product) => {
-    setFormData({ 
-      name: product.name, 
-      price: product.price, 
-      category: product.category, 
+    setFormData({
+      name: product.name,
+      price: product.price,
+      category: product.category,
       description: product.description || '',
       fabricType: product.fabricType || '',
       texture: product.texture || '',
       quality: product.quality || '',
       care: product.care || '',
-      images: [] 
+      images: []
     });
     setEditingId(product._id);
     setShowAddForm(true);
@@ -122,16 +122,16 @@ const AdminPanel = ({ onLogout }) => {
     if (confirm('Delete this product?')) {
       setDeletingId(id);
       try {
-        const response = await fetch(`${API_ENDPOINTS.admin.products}/${id}`, { 
+        const response = await fetch(`${API_ENDPOINTS.admin.products}/${id}`, {
           method: 'DELETE',
           headers: getAuthHeaders()
         });
-        
+
         if (response.status === 401) {
           onLogout();
           return;
         }
-        
+
         // Clear cache to ensure frontend updates immediately
         cache.clear('products');
         fetchProducts();
@@ -152,6 +152,7 @@ const AdminPanel = ({ onLogout }) => {
       comboPrice: combo.comboPrice,
       savings: combo.savings,
       images: [],
+      existingImages: combo.images || (combo.image ? [combo.image] : []),
       popular: combo.popular
     });
     setEditingComboId(combo._id);
@@ -166,12 +167,12 @@ const AdminPanel = ({ onLogout }) => {
           method: 'DELETE',
           headers: getAuthHeaders()
         });
-        
+
         if (response.status === 401) {
           onLogout();
           return;
         }
-        
+
         cache.clear('combos');
         fetchCombos();
       } catch (error) {
@@ -199,32 +200,36 @@ const AdminPanel = ({ onLogout }) => {
           formDataToSend.append('images', image);
         });
       }
-      
-      const url = editingComboId 
+
+      if (editingComboId && comboFormData.existingImages) {
+        formDataToSend.append('keptImages', JSON.stringify(comboFormData.existingImages));
+      }
+
+      const url = editingComboId
         ? `${API_ENDPOINTS.admin.combos}/${editingComboId}`
         : API_ENDPOINTS.admin.combos;
       const method = editingComboId ? 'PUT' : 'POST';
-      
+
       const response = await fetch(url, {
         method,
         headers: getAuthHeaders(),
         body: formDataToSend
       });
-      
+
       if (response.status === 401) {
         onLogout();
         return;
       }
-      
+
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
         alert(`Error: ${errorData.message || 'Failed to save combo'}`);
         return;
       }
-      
+
       cache.clear('combos');
       fetchCombos();
-      setComboFormData({ name: '', description: '', products: [], originalPrice: '', comboPrice: '', savings: '', images: [], popular: false });
+      setComboFormData({ name: '', description: '', products: [], originalPrice: '', comboPrice: '', savings: '', images: [], existingImages: [], popular: false });
       setEditingComboId(null);
       setShowAddForm(false);
     } catch (error) {
@@ -237,7 +242,7 @@ const AdminPanel = ({ onLogout }) => {
   const resetComboForm = () => {
     setShowAddForm(false);
     setEditingComboId(null);
-    setComboFormData({ name: '', description: '', products: [], originalPrice: '', comboPrice: '', savings: '', images: [], popular: false });
+    setComboFormData({ name: '', description: '', products: [], originalPrice: '', comboPrice: '', savings: '', images: [], existingImages: [], popular: false });
   };
 
   const handlePreviewCombo = (combo) => {
@@ -259,7 +264,7 @@ const AdminPanel = ({ onLogout }) => {
 
   const filteredCombos = combos.filter(combo => {
     const matchesSearch = combo.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         combo.description.toLowerCase().includes(searchTerm.toLowerCase());
+      combo.description.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesFilter = !filterPopular || combo.popular;
     return matchesSearch && matchesFilter;
   });
@@ -270,7 +275,7 @@ const AdminPanel = ({ onLogout }) => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-beige-50 font-sans selection:bg-peach-100 selection:text-gray-900">
       <AdminHeader
         activeTab={activeTab}
         itemCount={activeTab === 'products' ? products.length : combos.length}
@@ -281,128 +286,98 @@ const AdminPanel = ({ onLogout }) => {
         onToggleSidebar={() => setSidebarOpen(true)}
       />
 
-      <AdminSidebar
-        isOpen={sidebarOpen}
-        activeTab={activeTab}
-        onClose={() => setSidebarOpen(false)}
-        onAddNew={() => setShowAddForm(true)}
-        onChangePassword={() => setShowPasswordForm(true)}
-        onChangeEmail={() => setShowEmailForm(true)}
-        onLogout={handleLogout}
-      />
-
-      <div className="max-w-7xl mx-auto p-4 sm:p-6">
+      <div className="max-w-7xl mx-auto p-4 sm:p-8 lg:p-12">
         {/* Navigation Tabs */}
-        <div className="mb-4 sm:mb-6">
-          <div className="border-b border-gray-200">
-            <nav className="-mb-px flex">
+        {!showAddForm && !showPasswordForm && !showEmailForm && (
+          <div className="mb-12 flex justify-center sm:justify-start">
+            <div className="bg-white/40 backdrop-blur-md border border-peach-100 rounded-[2rem] p-2 inline-flex shadow-sm">
               <button
                 onClick={() => setActiveTab('products')}
-                className={`flex-1 sm:flex-none py-3 px-4 sm:px-6 border-b-2 font-medium text-sm transition-colors text-center ${
-                  activeTab === 'products'
-                    ? 'border-green-500 text-green-600 bg-green-50'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                }`}
+                className={`relative flex items-center space-x-3 px-8 py-3 rounded-[1.5rem] text-xs font-bold uppercase tracking-widest transition-all duration-500 overflow-hidden group ${activeTab === 'products'
+                  ? 'bg-gray-900 text-white shadow-xl scale-105'
+                  : 'text-gray-400 hover:text-gray-900'
+                  }`}
               >
-                <FaHome className="inline mr-2" />Products
-                <span className="ml-1 text-xs bg-gray-200 text-gray-600 px-2 py-0.5 rounded-full">
+                <FaHome className={`text-sm transition-transform duration-500 ${activeTab === 'products' ? 'text-peach-200' : 'group-hover:scale-110'}`} />
+                <span>Full Collection</span>
+                <span className={`ml-2 text-[10px] px-2.5 py-0.5 rounded-full transition-colors ${activeTab === 'products' ? 'bg-white/10 text-peach-200' : 'bg-gray-200 text-gray-400'
+                  }`}>
                   {products.length}
                 </span>
               </button>
               <button
                 onClick={() => setActiveTab('combos')}
-                className={`flex-1 sm:flex-none py-3 px-4 sm:px-6 border-b-2 font-medium text-sm transition-colors text-center ${
-                  activeTab === 'combos'
-                    ? 'border-green-500 text-green-600 bg-green-50'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                }`}
+                className={`relative flex items-center space-x-3 px-8 py-3 rounded-[1.5rem] text-xs font-bold uppercase tracking-widest transition-all duration-500 overflow-hidden group ${activeTab === 'combos'
+                  ? 'bg-gray-900 text-white shadow-xl scale-105'
+                  : 'text-gray-400 hover:text-gray-900'
+                  }`}
               >
-                <FaBoxes className="inline mr-2" />Combos
-                <span className="ml-1 text-xs bg-gray-200 text-gray-600 px-2 py-0.5 rounded-full">
+                <FaBoxes className={`text-sm transition-transform duration-500 ${activeTab === 'combos' ? 'text-peach-200' : 'group-hover:scale-110'}`} />
+                <span>Curated Ensembles</span>
+                <span className={`ml-2 text-[10px] px-2.5 py-0.5 rounded-full transition-colors ${activeTab === 'combos' ? 'bg-white/10 text-peach-200' : 'bg-gray-200 text-gray-400'
+                  }`}>
                   {combos.length}
                 </span>
               </button>
-            </nav>
+            </div>
           </div>
-        </div>
-
-        {showEmailForm && (
-          <EmailForm
-            emailData={emailData}
-            setEmailData={setEmailData}
-            onSubmit={async (e) => {
-              e.preventDefault();
-              setEmailLoading(true);
-              try {
-                const response = await fetch(API_ENDPOINTS.admin.changeEmail, {
-                  method: 'POST',
-                  headers: { 'Content-Type': 'application/json', ...getAuthHeaders() },
-                  body: JSON.stringify({ currentPassword: emailData.currentPassword, newEmail: emailData.newEmail })
-                });
-                if (response.ok) {
-                  alert('Email changed successfully');
-                  setShowEmailForm(false);
-                  setEmailData({ currentPassword: '', newEmail: '' });
-                } else {
-                  const data = await response.json();
-                  alert(data.error);
-                }
-              } catch (error) {
-                alert('Failed to change email');
-              } finally {
-                setEmailLoading(false);
-              }
-            }}
-            onCancel={() => {setShowEmailForm(false); setEmailData({ currentPassword: '', newEmail: '' });}}
-            loading={emailLoading}
-          />
         )}
 
-        {showPasswordForm && (
-          <PasswordForm
-            passwordData={passwordData}
-            setPasswordData={setPasswordData}
-            onSubmit={async (e) => {
-              e.preventDefault();
-              if (passwordData.newPassword !== passwordData.confirmPassword) {
-                alert('New passwords do not match');
-                return;
-              }
-              setPasswordLoading(true);
-              try {
-                const response = await fetch(API_ENDPOINTS.admin.changePassword, {
-                  method: 'POST',
-                  headers: { 'Content-Type': 'application/json', ...getAuthHeaders() },
-                  body: JSON.stringify({ currentPassword: passwordData.currentPassword, newPassword: passwordData.newPassword })
-                });
-                if (response.ok) {
-                  alert('Password changed successfully');
-                  setShowPasswordForm(false);
-                  setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' });
-                } else {
-                  const data = await response.json();
-                  alert(data.error);
-                }
-              } catch (error) {
-                alert('Failed to change password');
-              } finally {
-                setPasswordLoading(false);
-              }
-            }}
-            onCancel={() => {setShowPasswordForm(false); setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' });}}
-            loading={passwordLoading}
-          />
-        )}
+        {/* Content Area */}
+        <div className="space-y-10 animate-fade-in">
+          {/* Main List Views */}
+          {!showAddForm && !showPasswordForm && !showEmailForm && (
+            <>
+              {activeTab === 'products' ? (
+                products.length > 0 ? (
+                  <ProductList
+                    products={products}
+                    onEdit={handleEdit}
+                    onDelete={handleDelete}
+                    deletingId={deletingId}
+                    onAddNew={() => setShowAddForm(true)}
+                  />
+                ) : (
+                  <EmptyState activeTab="products" onAddNew={() => setShowAddForm(true)} />
+                )
+              ) : (
+                combos.length > 0 ? (
+                  <ComboList
+                    combos={combos}
+                    searchTerm={searchTerm}
+                    setSearchTerm={setSearchTerm}
+                    filterPopular={filterPopular}
+                    setFilterPopular={setFilterPopular}
+                    onEdit={handleEditCombo}
+                    onDelete={handleDeleteCombo}
+                    onPreview={handlePreviewCombo}
+                    editingId={editingComboId}
+                    deletingId={deletingComboId}
+                    onAddNew={() => setShowAddForm(true)}
+                  />
+                ) : (
+                  <EmptyState activeTab="combos" onAddNew={() => setShowAddForm(true)} />
+                )
+              )}
+            </>
+          )}
 
-        {showAddForm && activeTab === 'combos' && (
-          <div 
-            className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-end sm:items-center justify-center z-50 p-0 sm:p-4"
-            onClick={resetComboForm}
-          >
-            <div 
-              className="w-full max-w-4xl h-full sm:h-auto sm:max-h-[90vh] overflow-y-auto bg-white rounded-t-3xl sm:rounded-3xl shadow-2xl transform transition-all duration-500 ease-out animate-slide-up"
-              onClick={(e) => e.stopPropagation()}
-            >
+          {/* Form Overlay Views */}
+          {showAddForm && activeTab === 'products' && (
+            <ProductForm
+              product={editingId ? products.find(p => p._id === editingId) : null}
+              onSubmit={handleSubmit}
+              onCancel={() => {
+                setShowAddForm(false);
+                setEditingId(null);
+                setFormData({ name: '', price: '', category: '', description: '', fabricType: '', texture: '', quality: '', care: '', images: [] });
+              }}
+              loading={loading}
+            />
+          )}
+
+          {showAddForm && activeTab === 'combos' && (
+            <div className="bg-white/60 backdrop-blur-xl rounded-[3rem] shadow-2xl border border-peach-100/50 overflow-hidden animate-scale-in">
               <ComboForm
                 formData={comboFormData}
                 setFormData={setComboFormData}
@@ -415,63 +390,95 @@ const AdminPanel = ({ onLogout }) => {
                 calculatePrice={calculateTotalOriginalPrice}
               />
             </div>
-          </div>
-        )}
+          )}
 
-        {showAddForm && activeTab === 'products' && (
-          <ProductForm
-            product={editingId ? products.find(p => p._id === editingId) : null}
-            onSubmit={handleSubmit}
-            onCancel={() => {
-              setShowAddForm(false);
-              setEditingId(null);
-              setFormData({ name: '', price: '', category: '', description: '', fabricType: '', texture: '', quality: '', care: '', images: [] });
-            }}
-            loading={loading}
-          />
-        )}
+          {showPasswordForm && (
+            <PasswordForm
+              passwordData={passwordData}
+              setPasswordData={setPasswordData}
+              onSubmit={async (e) => {
+                e.preventDefault();
+                if (passwordData.newPassword !== passwordData.confirmPassword) {
+                  alert('New passwords do not match');
+                  return;
+                }
+                setPasswordLoading(true);
+                try {
+                  const response = await fetch(API_ENDPOINTS.admin.changePassword, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', ...getAuthHeaders() },
+                    body: JSON.stringify({ currentPassword: passwordData.currentPassword, newPassword: passwordData.newPassword })
+                  });
+                  if (response.ok) {
+                    alert('Password changed successfully');
+                    setShowPasswordForm(false);
+                    setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' });
+                  } else {
+                    const data = await response.json();
+                    alert(data.error);
+                  }
+                } catch (error) {
+                  alert('Failed to change password');
+                } finally {
+                  setPasswordLoading(false);
+                }
+              }}
+              onCancel={() => { setShowPasswordForm(false); setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' }); }}
+              loading={passwordLoading}
+            />
+          )}
 
-        {activeTab === 'products' && (
-          <ProductList
-            products={products}
-            onEdit={handleEdit}
-            onDelete={handleDelete}
-            deletingId={deletingId}
-            onAddNew={() => setShowAddForm(true)}
-          />
-        )}
-
-        {activeTab === 'combos' && (
-          <ComboList
-            combos={combos}
-            searchTerm={searchTerm}
-            setSearchTerm={setSearchTerm}
-            filterPopular={filterPopular}
-            setFilterPopular={setFilterPopular}
-            onEdit={handleEditCombo}
-            onDelete={handleDeleteCombo}
-            onPreview={handlePreviewCombo}
-            editingId={editingComboId}
-            deletingId={deletingComboId}
-            onAddNew={() => setShowAddForm(true)}
-          />
-        )}
-
-        {/* Combo Preview Modal */}
-        <ComboPreviewModal
-          combo={previewCombo}
-          isOpen={showComboPreview}
-          onClose={() => setShowComboPreview(false)}
-          onEdit={handleEditCombo}
-        />
-           
-        {((activeTab === 'products' && products.length === 0) || (activeTab === 'combos' && combos.length === 0)) && (
-          <EmptyState
-            activeTab={activeTab}
-            onAddNew={() => setShowAddForm(true)}
-          />
-        )}
+          {showEmailForm && (
+            <EmailForm
+              emailData={emailData}
+              setEmailData={setEmailData}
+              onSubmit={async (e) => {
+                e.preventDefault();
+                setEmailLoading(true);
+                try {
+                  const response = await fetch(API_ENDPOINTS.admin.changeEmail, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', ...getAuthHeaders() },
+                    body: JSON.stringify({ currentPassword: emailData.currentPassword, newEmail: emailData.newEmail })
+                  });
+                  if (response.ok) {
+                    alert('Email changed successfully');
+                    setShowEmailForm(false);
+                    setEmailData({ currentPassword: '', newEmail: '' });
+                  } else {
+                    const data = await response.json();
+                    alert(data.error);
+                  }
+                } catch (error) {
+                  alert('Failed to change email');
+                } finally {
+                  setEmailLoading(false);
+                }
+              }}
+              onCancel={() => { setShowEmailForm(false); setEmailData({ currentPassword: '', newEmail: '' }); }}
+              loading={emailLoading}
+            />
+          )}
+        </div>
       </div>
+
+      {/* Combo Preview Modal */}
+      <ComboPreviewModal
+        combo={previewCombo}
+        isOpen={showComboPreview}
+        onClose={() => setShowComboPreview(false)}
+        onEdit={handleEditCombo}
+      />
+
+      <AdminSidebar
+        isOpen={sidebarOpen}
+        activeTab={activeTab}
+        onClose={() => setSidebarOpen(false)}
+        onAddNew={() => setShowAddForm(true)}
+        onChangePassword={() => setShowPasswordForm(true)}
+        onChangeEmail={() => setShowEmailForm(true)}
+        onLogout={handleLogout}
+      />
     </div>
   );
 };

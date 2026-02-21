@@ -4,12 +4,35 @@ import LoadingScreen from './components/LoadingScreen';
 import Header from './components/Header';
 import MainWebsite from './components/MainWebsite';
 import AllProducts from './components/AllProducts';
-import AllCombos from './components/AllCombos';
 import ProductDetails from './components/ProductDetails';
-import ComboDetails from './components/ComboDetails';
 import AdminLogin from './components/AdminLogin';
 import AdminDashboard from './components/AdminDashboard';
+import { CartProvider } from './context/CartContext';
+import CartDrawer from './components/CartDrawer';
+import CheckoutPage from './components/CheckoutPage';
 import './utils/keepServerAlive';
+
+import { useLocation } from 'react-router-dom';
+
+const AppContent = () => {
+  const location = useLocation();
+  const isAdminPath = location.pathname.startsWith('/admin');
+
+  return (
+    <>
+      {!isAdminPath && <Header />}
+      {!isAdminPath && <CartDrawer />}
+      <Routes>
+        <Route path="/" element={<MainWebsite />} />
+        <Route path="/products" element={<AllProducts />} />
+        <Route path="/product/:id" element={<ProductDetails />} />
+        <Route path="/checkout" element={<CheckoutPage />} />
+        <Route path="/admin-login" element={<AdminLogin />} />
+        <Route path="/admin-dashboard" element={<AdminDashboard />} />
+      </Routes>
+    </>
+  );
+};
 
 const App = () => {
   const [loading, setLoading] = useState(true);
@@ -27,18 +50,11 @@ const App = () => {
   }
 
   return (
-    <Router>
-      <Header />
-      <Routes>
-        <Route path="/" element={<MainWebsite />} />
-        <Route path="/products" element={<AllProducts />} />
-        <Route path="/combos" element={<AllCombos />} />
-        <Route path="/product/:id" element={<ProductDetails />} />
-        <Route path="/combo/:id" element={<ComboDetails />} />
-        <Route path="/admin-login" element={<AdminLogin />} />
-        <Route path="/admin-dashboard" element={<AdminDashboard />} />
-      </Routes>
-    </Router>
+    <CartProvider>
+      <Router>
+        <AppContent />
+      </Router>
+    </CartProvider>
   );
 };
 

@@ -33,20 +33,20 @@ const Shop = () => {
   };
 
   return (
-    <section id="shop" className="py-20 bg-gray-50">
+    <section id="shop" className="py-24 bg-beige-50">
       <div className="container mx-auto px-6">
         <div className="text-center mb-16">
-          <div className="inline-flex items-center bg-green-100 text-green-800 px-4 py-2 rounded-full text-sm font-semibold mb-4">
-            🎆 Best Sellers
+          <div className="inline-flex items-center bg-peach-50 text-gold-600 px-4 py-2 rounded-full text-[10px] font-bold tracking-widest uppercase mb-4 border border-peach-100">
+            ✨ Best Sellers
           </div>
-          <h2 className="text-4xl font-bold text-gray-800 mb-4">Our Premium Collection</h2>
-          <div className="w-16 h-1 bg-green-600 mx-auto rounded-full mb-6"></div>
-          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-            Discover our most popular products trusted by thousands of customers. 
-            Each item is carefully selected for quality, durability, and style.
+          <h2 className="text-4xl lg:text-5xl font-serif font-bold text-gray-900 mb-4">Our Premium Collection</h2>
+          <div className="w-16 h-1 bg-gradient-to-r from-peach-200 via-gold-500 to-peach-200 mx-auto rounded-full mb-6"></div>
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto font-light">
+            Discover our most exquisite pieces curated for timeless elegance.
+            Each item is selected for its superior quality and sophisticated style.
           </p>
         </div>
-        
+
         {loading ? (
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
             {[...Array(4)].map((_, index) => (
@@ -57,7 +57,7 @@ const Shop = () => {
           <>
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
               {products.slice(0, 4).map((product, index) => (
-                <div 
+                <div
                   key={product._id}
                   className="animate-fade-in-up"
                   style={{ animationDelay: `${index * 150}ms` }}
@@ -66,14 +66,14 @@ const Shop = () => {
                 </div>
               ))}
             </div>
-            
-            <div className="text-center mt-16">
-              <div className="bg-gray-50 rounded-2xl p-8 max-w-2xl mx-auto">
-                <h3 className="text-2xl font-bold text-gray-800 mb-4">Explore Our Full Catalog</h3>
-                <p className="text-gray-600 mb-6">Browse through our complete collection of over 100+ premium textile products</p>
-                <a href="/products" className="inline-flex items-center bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all">
-                  <span>View All Products</span>
-                  <svg className="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+
+            <div className="text-center mt-20">
+              <div className="bg-white rounded-3xl p-10 max-w-3xl mx-auto shadow-sm border border-peach-50">
+                <h3 className="text-3xl font-serif font-bold text-gray-900 mb-4">Explore Our Full Catalog</h3>
+                <p className="text-gray-600 mb-8 max-w-lg mx-auto">Browse through our complete collection of exquisite jewelry and premium accessories.</p>
+                <a href="/products" className="inline-flex items-center bg-gray-900 hover:bg-black text-white px-10 py-4 rounded-full font-semibold shadow-xl transition-all group">
+                  <span>View All Collections</span>
+                  <svg className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                   </svg>
                 </a>
@@ -81,7 +81,8 @@ const Shop = () => {
             </div>
           </>
         )}
-        
+
+
         {!loading && products.length === 0 && (
           <div className="text-center py-12">
             <p className="text-gray-500 text-lg">No products available at the moment.</p>

@@ -1,6 +1,19 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Outfit:wght@300;400;500;600&display=swap');
 @import 'tailwindcss';
 
+@theme {
+  --color-beige-50: #FDFBF7;
+  --color-beige-100: #F5F5DC;
+  --color-beige-200: #EFEBD8;
+  --color-peach-50: #FFF5F0;
+  --color-peach-100: #FFDAB9;
+  --color-peach-200: #FBC4AB;
+  --color-gold-500: #D4AF37;
+  --color-gold-600: #B8860B;
+  
+  --font-serif: "Playfair Display", serif;
+  --font-sans: "Outfit", sans-serif;
+}
 
 @keyframes slide-up {
   from {
@@ -24,12 +37,34 @@
   }
 }
 
+@keyframes slide-in-right {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
 .animate-slide-up {
   animation: slide-up 0.5s ease-out;
 }
 
 .animate-scale-in {
   animation: scale-in 0.3s ease-out;
+}
+
+.animate-slide-in-right {
+  animation: slide-in-right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.animate-fade-in {
+  animation: fade-in 0.4s ease-out;
 }
 
 @media (max-width: 640px) {
@@ -45,52 +80,58 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f5f9;
+  background: var(--color-beige-50);
   border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(135deg, #10b981, #059669);
+  background: linear-gradient(135deg, var(--color-peach-100), var(--color-peach-200));
   border-radius: 10px;
   transition: all 0.3s ease;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(135deg, #059669, #047857);
+  background: linear-gradient(135deg, var(--color-peach-200), var(--color-gold-500));
   transform: scale(1.1);
 }
 
 ::-webkit-scrollbar-corner {
-  background: #f1f5f9;
+  background: var(--color-beige-50);
 }
 
 /* Firefox Scrollbar */
 * {
   scrollbar-width: thin;
-  scrollbar-color: #10b981 #f1f5f9;
+  scrollbar-color: var(--color-peach-100) var(--color-beige-50);
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-beige-50);
+  color: #1a1a1a;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-serif);
 }
 
 /* Mobile Admin Panel Enhancements */
 @media (max-width: 768px) {
-  /* Better touch targets */
   .admin-touch-target {
     min-height: 44px;
     min-width: 44px;
   }
   
-  /* Improved form inputs on mobile */
   .admin-form input,
   .admin-form textarea,
   .admin-form select {
-    font-size: 16px; /* Prevents zoom on iOS */
+    font-size: 16px;
   }
   
-  /* Better modal animations on mobile */
   .mobile-modal {
     animation: slide-up-mobile 0.3s ease-out;
   }
   
-  /* Sticky form buttons */
   .sticky-form-actions {
     position: sticky;
     bottom: 0;
@@ -110,13 +151,11 @@
   }
 }
 
-/* Improved scrolling for mobile */
 .mobile-scroll {
   -webkit-overflow-scrolling: touch;
   scroll-behavior: smooth;
 }
 
-/* Better checkbox and radio styling for mobile */
 @media (max-width: 768px) {
   input[type="checkbox"],
   input[type="radio"] {

@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { FaArrowLeft, FaWhatsapp, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import Button from './ui/Button';
 import { API_ENDPOINTS, apiRequest } from '../utils/api';
+import { useCart } from '../context/CartContext';
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -11,7 +12,9 @@ const ProductDetails = () => {
   const [loading, setLoading] = useState(true);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [selectedColor, setSelectedColor] = useState(null);
+  const [quantity, setQuantity] = useState(1);
   const [imageError, setImageError] = useState(false);
+  const { addToCart } = useCart();
 
   useEffect(() => {
     fetchProduct();
@@ -49,13 +52,13 @@ const ProductDetails = () => {
   const handleWhatsAppOrder = () => {
     const colorText = selectedColor ? ` in ${selectedColor.name}` : '';
     const message = `Hi, I'm interested in ${product.name}${colorText} for ${product.price}`;
-    window.open(`https://wa.me/2347069257877?text=${encodeURIComponent(message)}`, '_blank');
+    window.open(`https://wa.me/2349120491702?text=${encodeURIComponent(message)}`, '_blank');
   };
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600"></div>
+      <div className="min-h-screen bg-beige-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-peach-200"></div>
       </div>
     );
   }
@@ -71,19 +74,19 @@ const ProductDetails = () => {
     );
   }
 
-  const currentImages = selectedColor?.images || 
-    (product.images && product.images.length > 0 ? product.images : 
-    (product.image ? [product.image] : ['https://via.placeholder.com/400x400?text=No+Image']));
+  const currentImages = selectedColor?.images ||
+    (product.images && product.images.length > 0 ? product.images :
+      (product.image ? [product.image] : ['https://via.placeholder.com/400x400?text=No+Image']));
 
   return (
     <div className="min-h-screen bg-gray-50 pt-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
-        <nav className="flex items-center space-x-2 text-xs sm:text-sm text-gray-500 mb-4 sm:mb-6 lg:mb-8">
-          <button onClick={() => navigate('/')} className="hover:text-green-600 transition-colors truncate">Home</button>
+        <nav className="flex items-center space-x-2 text-xs sm:text-sm text-gray-400 mb-8 lowercase tracking-widest">
+          <button onClick={() => navigate('/')} className="hover:text-gold-600 transition-colors truncate">home</button>
           <span>/</span>
-          <button onClick={() => navigate('/products')} className="hover:text-green-600 transition-colors truncate">Products</button>
+          <button onClick={() => navigate('/products')} className="hover:text-gold-600 transition-colors truncate">shop</button>
           <span>/</span>
-          <span className="text-gray-900 truncate">{product.name}</span>
+          <span className="text-gray-900 truncate font-semibold">{product.name}</span>
         </nav>
 
         <div className="grid lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-12 xl:gap-16">
@@ -91,13 +94,13 @@ const ProductDetails = () => {
           <div className="space-y-3 sm:space-y-4">
             <div className="relative bg-white rounded-xl sm:rounded-2xl p-3 sm:p-4 shadow-sm">
               <div className="relative aspect-square bg-gray-50 rounded-lg sm:rounded-xl overflow-hidden">
-                <img 
-                  src={imageError ? 'https://via.placeholder.com/600x600?text=No+Image' : currentImages[currentImageIndex]} 
+                <img
+                  src={imageError ? 'https://via.placeholder.com/600x600?text=No+Image' : currentImages[currentImageIndex]}
                   alt={product.name}
                   className="w-full h-full object-cover"
                   onError={() => setImageError(true)}
                 />
-                
+
                 {currentImages.length > 1 && (
                   <>
                     <button
@@ -112,7 +115,7 @@ const ProductDetails = () => {
                     >
                       <FaChevronRight size={14} className="sm:w-4 sm:h-4" />
                     </button>
-                    
+
                     <div className="absolute top-2 sm:top-4 right-2 sm:right-4 bg-black/70 text-white px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-medium">
                       {currentImageIndex + 1} / {currentImages.length}
                     </div>
@@ -129,9 +132,8 @@ const ProductDetails = () => {
                     <button
                       key={index}
                       onClick={() => setCurrentImageIndex(index)}
-                      className={`aspect-square rounded-md sm:rounded-lg overflow-hidden border-2 transition-all hover:scale-105 ${
-                        index === currentImageIndex ? 'border-green-500 ring-1 sm:ring-2 ring-green-200' : 'border-gray-200 hover:border-gray-300'
-                      }`}
+                      className={`aspect-square rounded-md sm:rounded-lg overflow-hidden border-2 transition-all hover:scale-105 ${index === currentImageIndex ? 'border-peach-200 ring-1 sm:ring-2 ring-peach-50' : 'border-gray-200 hover:border-gray-300'
+                        }`}
                     >
                       <img src={image} alt={`View ${index + 1}`} className="w-full h-full object-cover" />
                     </button>
@@ -150,15 +152,15 @@ const ProductDetails = () => {
           <div className="space-y-4 sm:space-y-6 lg:space-y-8">
             <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-sm">
               <div className="flex flex-wrap items-center gap-2 mb-3 sm:mb-4">
-                <span className="bg-green-100 text-green-800 px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-medium">
+                <span className="bg-peach-50 text-gold-600 px-3 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase border border-peach-100">
                   {product.category}
                 </span>
                 <span className="text-gray-400 hidden sm:inline">•</span>
                 <span className="text-xs sm:text-sm text-gray-500">In Stock</span>
               </div>
-              <h1 className="text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-bold text-gray-900 mb-3 sm:mb-4 leading-tight">{product.name}</h1>
-              <div className="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-2">
-                <p className="text-2xl sm:text-3xl lg:text-4xl font-bold text-green-600">{product.price}</p>
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-bold text-gray-900 mb-4 leading-tight">{product.name}</h1>
+              <div className="flex flex-col sm:flex-row sm:items-baseline gap-2">
+                <p className="text-3xl sm:text-4xl font-serif font-bold text-gray-900">{product.price}</p>
                 <span className="text-sm sm:text-base lg:text-lg text-gray-500">per piece</span>
               </div>
             </div>
@@ -172,11 +174,10 @@ const ProductDetails = () => {
                     <button
                       key={index}
                       onClick={() => handleColorSelect(color)}
-                      className={`p-3 sm:p-4 rounded-lg sm:rounded-xl border-2 transition-all text-center ${
-                        selectedColor?.name === color.name
-                          ? 'border-green-500 bg-green-50 text-green-800 ring-1 sm:ring-2 ring-green-200'
-                          : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
-                      }`}
+                      className={`p-3 sm:p-4 rounded-lg sm:rounded-xl border-2 transition-all text-center ${selectedColor?.name === color.name
+                        ? 'border-peach-200 bg-peach-50 text-gray-900 ring-1 sm:ring-2 ring-peach-50'
+                        : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                        }`}
                     >
                       <div className="font-medium text-sm sm:text-base">{color.name}</div>
                     </button>
@@ -227,22 +228,48 @@ const ProductDetails = () => {
             )}
 
             {/* Order Section */}
-            <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-sm border-2 border-green-100">
-              <div className="text-center mb-4 sm:mb-6">
-                <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-2">Ready to Order?</h3>
-                <p className="text-gray-600 text-sm sm:text-base">Contact us directly via WhatsApp for instant service</p>
+            <div className="bg-white rounded-3xl p-8 shadow-sm border border-peach-50">
+              <div className="flex items-center justify-between mb-6">
+                <span className="text-gray-900 font-semibold">Quantity</span>
+                <div className="flex items-center border border-peach-100 rounded-full bg-beige-50 px-2 py-1">
+                  <button
+                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                    className="p-2 text-gray-400 hover:text-gold-600 transition-colors"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" /></svg>
+                  </button>
+                  <span className="px-4 font-bold text-gray-900 min-w-[3rem] text-center">{quantity}</span>
+                  <button
+                    onClick={() => setQuantity(quantity + 1)}
+                    className="p-2 text-gray-400 hover:text-gold-600 transition-colors"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
+                  </button>
+                </div>
               </div>
-              <Button
-                variant="whatsapp"
-                size="lg"
-                className="w-full bg-green-600 hover:bg-green-700 text-white py-3 sm:py-4 text-base sm:text-lg font-semibold rounded-lg sm:rounded-xl shadow-lg hover:shadow-xl transition-all"
-                icon={<FaWhatsapp size={20} className="sm:w-6 sm:h-6" />}
-                onClick={handleWhatsAppOrder}
-              >
-                Order via WhatsApp
-              </Button>
-              <div className="mt-3 sm:mt-4 text-center">
-                <p className="text-xs sm:text-sm text-gray-500">Fast response • Secure payment • Nationwide delivery</p>
+
+              <div className="space-y-4">
+                <Button
+                  variant="primary"
+                  size="lg"
+                  className="w-full bg-gray-900 hover:bg-black text-white py-4 text-lg font-semibold rounded-full shadow-xl transition-all"
+                  onClick={() => addToCart(product, quantity, selectedColor?.name)}
+                >
+                  Add to Cart
+                </Button>
+
+                <Button
+                  variant="secondary"
+                  size="lg"
+                  className="w-full border-peach-100 text-gray-700 py-4 text-lg font-semibold rounded-full transition-all"
+                  icon={<FaWhatsapp size={20} />}
+                  onClick={handleWhatsAppOrder}
+                >
+                  Order via WhatsApp
+                </Button>
+              </div>
+              <div className="mt-6 text-center">
+                <p className="text-xs sm:text-sm text-gray-500 font-light">Fast response • Secure payment • Nationwide delivery</p>
               </div>
             </div>
           </div>

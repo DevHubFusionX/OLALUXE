@@ -21,34 +21,35 @@ const WhyChooseUs = () => {
     {
       icon: FaAward,
       title: 'Best Prices',
-      description: 'Competitive pricing with regular discounts and combo deals for maximum value.'
+      description: "Competitive pricing with regular discounts and exceptional value."
     }
   ];
 
   return (
-    <section className="py-20 bg-gradient-to-br from-gray-50 to-white">
+    <section className="py-24 bg-white">
       <div className="container mx-auto px-6">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-gray-800 mb-4">Why Choose Moderate's Textile</h2>
-          <div className="w-16 h-1 bg-green-600 mx-auto rounded-full mb-6"></div>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            We're committed to providing exceptional service and premium quality products
+        <div className="text-center mb-20">
+          <h2 className="text-4xl lg:text-5xl font-serif font-bold text-gray-900 mb-4">Why Olaluxe?</h2>
+          <div className="w-16 h-1 bg-gradient-to-r from-peach-200 via-gold-500 to-peach-200 mx-auto rounded-full mb-6"></div>
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto font-light leading-relaxed">
+            We are dedicated to the art of fine curation, ensuring every piece meets our standard of timeless elegance.
           </p>
         </div>
-        
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12">
           {features.map((feature, index) => (
             <div key={index} className="text-center group">
-              <div className="inline-flex items-center justify-center w-20 h-20 bg-green-100 text-green-600 rounded-2xl mb-6 group-hover:bg-green-600 group-hover:text-white transition-all duration-300 transform group-hover:scale-110">
-                <feature.icon size={32} />
+              <div className="inline-flex items-center justify-center w-24 h-24 bg-beige-50 text-gold-600 rounded-[2.5rem] mb-8 group-hover:bg-peach-50 transition-all duration-500 transform group-hover:-translate-y-2 border border-peach-50">
+                <feature.icon size={36} className="group-hover:scale-110 transition-transform" />
               </div>
-              <h3 className="text-xl font-bold text-gray-800 mb-3">{feature.title}</h3>
-              <p className="text-gray-600 leading-relaxed">{feature.description}</p>
+              <h3 className="text-xl font-serif font-bold text-gray-900 mb-4">{feature.title}</h3>
+              <p className="text-gray-500 leading-relaxed font-light text-sm">{feature.description.replace("Moderate's Textile", "Olaluxe")}</p>
             </div>
           ))}
         </div>
       </div>
     </section>
+
   );
 };
 

@@ -1,77 +1,81 @@
 import React from 'react';
-import { FaWhatsapp, FaPhone, FaCheckCircle, FaShippingFast } from 'react-icons/fa';
+import { FaWhatsapp, FaGem, FaShippingFast, FaCrown } from 'react-icons/fa';
 import heroImage from '../assets/moderate_textile.jpg';
 
 const Hero = () => {
   return (
-    <section id="home" className="pt-28 pb-16 bg-white border-b">
+    <section id="home" className="pt-32 pb-20 bg-beige-50">
       <div className="container mx-auto px-6">
         <div className="max-w-7xl mx-auto">
-          {/* Top Banner */}
-         
-          
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div className="text-center lg:text-left">
-              <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6 leading-tight">
-                Moderate's Textile
+              <div className="inline-flex items-center space-x-2 bg-peach-50 px-4 py-2 rounded-full mb-6 border border-peach-100">
+                <FaCrown className="text-gold-500" size={14} />
+                <span className="text-xs font-bold tracking-widest text-gray-600 uppercase">Jewelry, Bags & Girly Essentials</span>
+              </div>
+
+              <h1 className="text-5xl lg:text-7xl font-serif font-bold text-gray-900 mb-6 leading-tight">
+                Embrace Your <br />
+                <span className="text-gold-600 italic">Timeless Elegance</span>
               </h1>
-              <p className="text-lg text-gray-600 mb-8 leading-relaxed">
-                Premium-quality traditional and urban wear at unbeatable prices. 
-                Order easily via WhatsApp for instant service.
+
+              <p className="text-lg text-gray-600 mb-10 leading-relaxed max-w-lg">
+                Discover Olaluxe.ng's curated collection of exquisite jewelry, premium bags, and girly essentials all sold here 🥰🛍️
               </p>
-              
-              <div className="flex flex-col sm:flex-row gap-4">
-                <a href="https://wa.me/2347069257877" className="bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-lg font-semibold shadow-lg hover:shadow-xl transition-all flex items-center justify-center space-x-2">
-                  <FaWhatsapp size={20} />
+
+              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                <a href="https://wa.me/2349120491702" className="bg-gray-900 hover:bg-black text-white px-10 py-4 rounded-full font-semibold shadow-xl transition-all flex items-center justify-center space-x-3 group">
+                  <FaWhatsapp size={20} className="group-hover:scale-110 transition-transform" />
                   <span>Order via WhatsApp</span>
                 </a>
-                <a href="/products" className="bg-gray-100 hover:bg-gray-200 text-gray-800 px-8 py-4 rounded-lg font-semibold transition-all text-center">
-                  Browse Products
+                <a href="/products" className="bg-white border border-peach-100 hover:border-gold-500 text-gray-800 px-10 py-4 rounded-full font-semibold transition-all text-center">
+                  Explore Shop
                 </a>
               </div>
             </div>
-            
+
             <div className="relative">
               {/* Decorative Background Elements */}
-              <div className="absolute -top-4 -right-4 w-32 h-32 bg-green-100 rounded-full opacity-20 animate-pulse"></div>
-              <div className="absolute -bottom-8 -left-8 w-24 h-24 bg-green-200 rounded-full opacity-30"></div>
-              
+              <div className="absolute -top-10 -right-10 w-64 h-64 bg-peach-100 rounded-full blur-3xl opacity-30 animate-pulse"></div>
+              <div className="absolute -bottom-10 -left-10 w-48 h-48 bg-gold-500 rounded-full blur-3xl opacity-10"></div>
+
               {/* Main Image Container */}
-              <div className="relative overflow-hidden">
-                {/* Geometric Frame */}
-                <div className="relative bg-gradient-to-br from-green-50 to-white p-6 rounded-3xl shadow-2xl transform rotate-2 hover:rotate-0 transition-transform duration-500">
-                  <div className="bg-white p-4 rounded-2xl shadow-inner">
-                    <div className="relative overflow-hidden rounded-xl">
-                      <img 
-                        src={heroImage} 
-                        alt="Moderate's Textile Showroom" 
-                        className="w-full h-[350px] object-cover transform hover:scale-105 transition-transform duration-700" 
-                      />
-                      {/* Image Overlay */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent"></div>
-                      
-                      {/* Floating Badge */}
-                      <div className="absolute top-4 left-4 bg-green-600 text-white px-3 py-1 rounded-full text-sm font-semibold shadow-lg">
-                        Premium Quality
-                      </div>
+              <div className="relative">
+                {/* Elegant Frame */}
+                <div className="relative bg-white p-3 rounded-2xl shadow-2xl overflow-hidden border border-peach-50">
+                  <div className="relative overflow-hidden rounded-xl">
+                    <img
+                      src={heroImage}
+                      alt="Olaluxe Collection Preview"
+                      className="w-full h-[500px] object-cover"
+                    />
+                    {/* Image Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
+
+                    {/* Floating Badge */}
+                    <div className="absolute top-6 left-6 bg-white/90 backdrop-blur-sm text-gray-900 px-4 py-2 rounded-full text-xs font-bold tracking-widest shadow-lg">
+                      NEW ARRIVALS
                     </div>
                   </div>
                 </div>
-                
-                {/* Floating Stats - Repositioned */}
-                <div className="absolute -bottom-4 left-8 right-8 bg-white/95 backdrop-blur-sm rounded-2xl shadow-xl p-4 border border-green-100">
-                  <div className="grid grid-cols-3 gap-4 text-center">
+
+                {/* Floating Stats - Repositioned and Styled */}
+                <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 w-[90%] bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl p-6 border border-peach-50">
+                  <div className="grid grid-cols-3 gap-6 text-center">
                     <div className="group">
-                      <div className="text-2xl font-bold text-green-600 group-hover:scale-110 transition-transform">5K+</div>
-                      <div className="text-xs text-gray-600">Happy Customers</div>
+                      <FaGem className="mx-auto text-gold-500 mb-2 group-hover:scale-110 transition-transform" size={20} />
+                      <div className="text-xl font-bold text-gray-900">100%</div>
+                      <div className="text-[10px] uppercase tracking-tighter text-gray-500 font-bold">Authentic</div>
                     </div>
-                    <div className="group border-x border-gray-200">
-                      <div className="text-2xl font-bold text-green-600 group-hover:scale-110 transition-transform">36</div>
-                      <div className="text-xs text-gray-600">States Covered</div>
+                    <div className="group border-x border-peach-50">
+                      <FaShippingFast className="mx-auto text-gold-500 mb-2 group-hover:scale-110 transition-transform" size={20} />
+                      <div className="text-xl font-bold text-gray-900">Fast</div>
+                      <div className="text-[10px] uppercase tracking-tighter text-gray-500 font-bold">Shipping</div>
                     </div>
                     <div className="group">
-                      <div className="text-2xl font-bold text-green-600 group-hover:scale-110 transition-transform">100+</div>
-                      <div className="text-xs text-gray-600">Products</div>
+                      <div className="mx-auto text-gold-500 mb-2 group-hover:scale-110 transition-transform font-serif italic text-xl">5★</div>
+                      <div className="text-xl font-bold text-gray-900">500+</div>
+                      <div className="text-[10px] uppercase tracking-tighter text-gray-500 font-bold">Reviews</div>
                     </div>
                   </div>
                 </div>

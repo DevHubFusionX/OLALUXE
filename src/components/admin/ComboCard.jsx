@@ -1,22 +1,22 @@
 import React, { useState } from 'react';
 import { FaEdit, FaTimes, FaEye, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 
-const ComboCard = ({ 
-  combo, 
-  onEdit, 
-  onDelete, 
-  onPreview, 
-  isEditing, 
-  isDeleting 
+const ComboCard = ({
+  combo,
+  onEdit,
+  onDelete,
+  onPreview,
+  isEditing,
+  isDeleting
 }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [imageError, setImageError] = useState(false);
-  
-  const images = combo.images && combo.images.length > 0 
-    ? combo.images 
-    : combo.image 
-    ? (Array.isArray(combo.image) ? combo.image : [combo.image])
-    : ['/api/placeholder/300/200'];
+
+  const images = combo.images && combo.images.length > 0
+    ? combo.images
+    : combo.image
+      ? (Array.isArray(combo.image) ? combo.image : [combo.image])
+      : ['/api/placeholder/300/200'];
 
   const nextImage = () => {
     setCurrentImageIndex((prev) => (prev + 1) % images.length);
@@ -27,136 +27,93 @@ const ComboCard = ({
   };
 
   return (
-    <div className="group bg-white rounded-2xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden hover:-translate-y-1 h-[450px] sm:h-[420px] md:h-[450px] flex flex-col">
-      <div className="relative overflow-hidden h-48 sm:h-52 flex-shrink-0">
-        <img 
-          src={imageError ? '/api/placeholder/300/200' : images[currentImageIndex]} 
-          alt={combo.name} 
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+    <div className="group bg-white/50 backdrop-blur-sm rounded-3xl shadow-sm hover:shadow-2xl transition-all duration-500 overflow-hidden border border-peach-100/50 hover:border-peach-200 h-[340px] flex flex-col animate-scale-in">
+      {/* Visual Header */}
+      <div className="relative h-40 flex-shrink-0 group-hover:h-44 transition-all duration-500 overflow-hidden">
+        <img
+          src={imageError ? '/api/placeholder/300/200' : images[currentImageIndex]}
+          alt={combo.name}
+          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
           loading="lazy"
           onError={() => setImageError(true)}
         />
-        
+
+        {/* Gallery Navigation */}
         {images.length > 1 && (
-          <>
+          <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 flex justify-between px-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
             <button
               onClick={prevImage}
-              className="absolute left-1 sm:left-2 top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-1.5 sm:p-2 rounded-full opacity-80 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity"
+              className="w-8 h-8 flex items-center justify-center bg-white/90 backdrop-blur-md text-gray-900 rounded-full hover:bg-white shadow-lg transition-transform hover:scale-110"
             >
-              <FaChevronLeft size={10} className="sm:w-3 sm:h-3" />
+              <FaChevronLeft size={10} />
             </button>
             <button
               onClick={nextImage}
-              className="absolute right-1 sm:right-2 top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-1.5 sm:p-2 rounded-full opacity-80 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity"
+              className="w-8 h-8 flex items-center justify-center bg-white/90 backdrop-blur-md text-gray-900 rounded-full hover:bg-white shadow-lg transition-transform hover:scale-110"
             >
-              <FaChevronRight size={10} className="sm:w-3 sm:h-3" />
+              <FaChevronRight size={10} />
             </button>
-            <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 max-w-[80%]">
-              {images.length <= 8 ? (
-                <div className="flex space-x-1 justify-center">
-                  {images.map((_, index) => (
-                    <div
-                      key={index}
-                      className={`w-2 h-2 rounded-full ${
-                        index === currentImageIndex ? 'bg-white' : 'bg-white/50'
-                      }`}
-                    />
-                  ))}
-                </div>
-              ) : (
-                <div className="bg-black/70 text-white px-2 py-1 rounded-full text-xs text-center">
-                  {currentImageIndex + 1} / {images.length}
-                </div>
-              )}
-            </div>
-          </>
+          </div>
         )}
-        
-        <div className="absolute top-2 sm:top-3 left-2 sm:left-3 flex flex-col gap-1">
+
+        <div className="absolute top-4 left-4 flex flex-col gap-2">
           {combo.popular && (
-            <div className="bg-red-500 text-white px-2 py-1 rounded-full text-xs font-semibold">
-              Popular
+            <div className="bg-gray-900/80 backdrop-blur-md text-peach-200 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest shadow-lg">
+              Featured Highlight
             </div>
           )}
-          <div className="bg-green-600 text-white px-2 py-1 rounded-full text-xs font-semibold">
-            {combo.products?.length || 0} items
+          <div className="bg-white/80 backdrop-blur-md text-gray-700 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest shadow-md">
+            {combo.products?.length || 0} Piece Collection
           </div>
         </div>
-        
+
         {images.length > 1 && (
-          <div className="absolute top-2 sm:top-3 right-2 sm:right-3 bg-black/70 text-white px-2 py-1 rounded-full text-xs">
-            +{images.length - 1}
+          <div className="absolute bottom-4 right-4 bg-gray-900/40 backdrop-blur-md text-white px-3 py-1 rounded-full text-[10px] font-medium tracking-widest">
+            {currentImageIndex + 1} / {images.length}
           </div>
         )}
-        
-        {/* Debug info - remove after testing */}
-        <div className="absolute bottom-2 left-2 bg-red-500 text-white px-1 py-0.5 rounded text-xs">
-          {images.length} img(s)
-        </div>
-        
+
         {(isEditing || isDeleting) && (
-          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center">
-            <div className="animate-spin rounded-full h-8 w-8 border-2 border-white border-t-transparent"></div>
+          <div className="absolute inset-0 bg-white/40 backdrop-blur-md flex items-center justify-center">
+            <div className="w-8 h-8 border-2 border-gray-900/20 border-t-gray-900 rounded-full animate-spin"></div>
           </div>
         )}
       </div>
-      
-      <div className="p-3 sm:p-4 flex flex-col flex-1">
-        <h3 className="text-base sm:text-lg font-bold text-gray-800 mb-2 leading-tight">
-          {combo.name}
-        </h3>
-        
-        <p className="text-gray-600 text-sm mb-3 line-clamp-2 leading-relaxed">
-          {combo.description}
-        </p>
-        
-        <div className="mb-3 space-y-1">
-          <div className="flex items-center text-xs text-gray-500">
-            <span className="w-2 h-2 bg-blue-400 rounded-full mr-2"></span>
-            <span>Bundle includes {combo.products?.length || 0} products</span>
-          </div>
-          <div className="flex items-center text-xs text-gray-500">
-            <span className="w-2 h-2 bg-green-400 rounded-full mr-2"></span>
-            <span>Save {combo.savings}</span>
+
+      {/* Content Section */}
+      <div className="p-3.5 flex flex-col flex-1 bg-gradient-to-b from-white to-transparent">
+        <div className="mb-2">
+          <h3 className="text-sm font-serif font-bold text-gray-900 mb-0.5 leading-tight group-hover:text-gold-600 transition-colors uppercase tracking-tight line-clamp-1">
+            {combo.name}
+          </h3>
+          <div className="flex items-baseline space-x-2">
+            <span className="text-lg font-serif font-bold text-gray-900">{combo.comboPrice}</span>
+            <span className="text-[10px] text-gray-400 font-medium line-through decoration-peach-200">{combo.originalPrice}</span>
           </div>
         </div>
-        
-        <div className="mt-auto">
-          <div className="flex items-center justify-between mb-2 sm:mb-3">
-            <span className="text-lg sm:text-xl font-bold text-green-600">{combo.comboPrice}</span>
-            <span className="text-sm text-gray-500 line-through">{combo.originalPrice}</span>
-          </div>
-          
-          <div className="flex space-x-2">
-            <button 
+
+        <div className="mt-auto pt-2 border-t border-peach-50/50">
+
+          <div className="flex gap-2">
+            <button
               onClick={() => onPreview(combo)}
-              className="flex-1 bg-green-600 hover:bg-green-700 text-white py-2 px-3 rounded-lg text-sm font-medium transition-colors flex items-center justify-center"
-              title="Preview"
+              className="w-10 h-10 flex items-center justify-center bg-beige-50 hover:bg-white text-gray-600 rounded-xl transition-all border border-peach-100 shadow-sm active:scale-95"
             >
-              <FaEye className="mr-1 text-xs" />
-              View
+              <FaEye size={14} />
             </button>
-            <button 
+            <button
               onClick={() => onEdit(combo)}
               disabled={isEditing || isDeleting}
-              className="flex-1 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white py-2 px-3 rounded-lg text-sm font-medium transition-colors flex items-center justify-center"
-              title="Edit"
+              className="flex-1 bg-gray-900 hover:bg-black text-white py-2 rounded-xl text-[9px] font-bold uppercase tracking-widest transition-all shadow-md active:scale-95"
             >
-              <FaEdit className="mr-1 text-xs" />
-              Edit
+              Refine
             </button>
-            <button 
+            <button
               onClick={() => onDelete(combo._id)}
               disabled={isEditing || isDeleting}
-              className="flex-1 bg-red-600 hover:bg-red-700 disabled:bg-gray-400 text-white py-2 px-3 rounded-lg text-sm font-medium transition-colors flex items-center justify-center"
-              title="Delete"
+              className="w-10 h-10 flex items-center justify-center border border-peach-100 hover:bg-red-50 text-gray-400 hover:text-red-500 rounded-xl transition-all"
             >
-              <FaTimes className="mr-1 text-xs" />
-              {isDeleting ? (
-                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-              ) : (
-                'Del'
-              )}
+              <FaTimes size={14} />
             </button>
           </div>
         </div>
