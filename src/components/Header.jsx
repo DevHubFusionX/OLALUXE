@@ -16,16 +16,10 @@ const Header = () => {
         <div className="container mx-auto px-6 py-4">
           <div className="flex justify-between items-center">
             {/* Logo Section with unique styling */}
-            <Link to="/" className="group flex items-center space-x-3 relative">
+            <Link to="/" className="group flex items-center relative">
               <div className="relative">
-                <div className="absolute -inset-2 bg-gradient-to-r from-peach-100 to-gold-500 rounded-full opacity-10 group-hover:opacity-20 transition-opacity"></div>
-                <img src="/logo1.svg" alt="Olaluxe" className="w-10 h-10 relative z-10" />
-              </div>
-              <div className="relative">
-                <h1 className="text-2xl font-serif font-bold tracking-widest text-gray-900">
-                  OLALUXE.NG
-                </h1>
-                <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-peach-200 to-gold-500 group-hover:w-full transition-all duration-300"></div>
+                <div className="absolute -inset-4 bg-gradient-to-r from-peach-100 to-gold-500 rounded-full opacity-10 group-hover:opacity-20 transition-opacity"></div>
+                <img src="/logo1.svg" alt="Olaluxe" className="h-12 w-auto sm:h-20 relative z-10 transition-transform duration-500 group-hover:scale-110" />
               </div>
             </Link>
 
