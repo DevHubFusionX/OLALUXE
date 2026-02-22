@@ -53,8 +53,8 @@ const ComboList = ({
               className="w-full pl-11 pr-4 py-3 bg-white/50 border border-peach-100 rounded-2xl focus:ring-2 focus:ring-peach-200 outline-none transition-all text-sm font-medium"
             />
           </div>
-          <div className="flex items-center space-x-4 bg-white/50 border border-peach-50 px-5 py-3 rounded-2xl">
-            <div className="flex items-center space-x-2 border-r border-peach-50 pr-4 mr-2">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center space-y-3 sm:space-y-0 sm:space-x-4 bg-white/50 border border-peach-50 px-4 sm:px-5 py-3 rounded-2xl">
+            <div className="flex items-center space-x-2 sm:border-r border-peach-50 sm:pr-4 sm:mr-2">
               <FaFilter className="text-gold-600 text-xs" />
               <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Filter</span>
             </div>
@@ -115,26 +115,26 @@ const ComboList = ({
         {combos.length > 0 && (
           <div className="mt-10 p-6 bg-gray-900 rounded-3xl border border-white/10 shadow-xl overflow-hidden relative">
             <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-peach-200/10 to-transparent rounded-full -mr-32 -mt-32 blur-3xl"></div>
-            <div className="relative grid grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="relative grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
               <div className="text-center md:text-left">
                 <p className="text-2xl font-serif font-bold text-peach-200">{combos.length}</p>
                 <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-1">Total Curations</p>
               </div>
-              <div className="text-center md:text-left border-l border-white/10 pl-0 md:pl-8">
-                <p className="text-2xl font-serif font-bold text-white">{combos.filter(c => c.popular).length}</p>
-                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-1">Highlights</p>
+              <div className="text-center sm:text-left">
+                <p className="text-xl sm:text-2xl font-serif font-bold text-white">{combos.filter(c => c.popular).length}</p>
+                <p className="text-[9px] sm:text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-1">Highlights</p>
               </div>
-              <div className="text-center md:text-left border-l border-white/10 pl-0 md:pl-8">
-                <p className="text-2xl font-serif font-bold text-white">
+              <div className="text-center sm:text-left">
+                <p className="text-xl sm:text-2xl font-serif font-bold text-white">
                   {combos.reduce((acc, combo) => acc + (combo.products?.length || 0), 0)}
                 </p>
-                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-1">Total Pieces</p>
+                <p className="text-[9px] sm:text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-1">Total Pieces</p>
               </div>
-              <div className="text-center md:text-left border-l border-white/10 pl-0 md:pl-8">
-                <p className="text-2xl font-serif font-bold text-white">
+              <div className="text-center sm:text-left">
+                <p className="text-xl sm:text-2xl font-serif font-bold text-white">
                   {Math.round(combos.reduce((acc, combo) => acc + (combo.products?.length || 0), 0) / combos.length) || 0}
                 </p>
-                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-1">Pieces Per Set</p>
+                <p className="text-[9px] sm:text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-1">Pieces Per Set</p>
               </div>
             </div>
           </div>

@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { FaWhatsapp, FaBars, FaTimes, FaShoppingCart } from 'react-icons/fa';
 import { FaXTwitter } from 'react-icons/fa6';
 import { Link } from 'react-router-dom';
-import Logo from './ui/Logo';
 import { useCart } from '../context/CartContext';
 
 const Header = () => {
@@ -20,7 +19,7 @@ const Header = () => {
             <Link to="/" className="group flex items-center space-x-3 relative">
               <div className="relative">
                 <div className="absolute -inset-2 bg-gradient-to-r from-peach-100 to-gold-500 rounded-full opacity-10 group-hover:opacity-20 transition-opacity"></div>
-                <Logo size="md" className="relative z-10" />
+                <img src="/logo1.svg" alt="Olaluxe" className="w-10 h-10 relative z-10" />
               </div>
               <div className="relative">
                 <h1 className="text-2xl font-serif font-bold tracking-widest text-gray-900">

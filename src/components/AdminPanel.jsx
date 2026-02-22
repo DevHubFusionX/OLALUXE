@@ -19,7 +19,7 @@ const AdminPanel = ({ onLogout }) => {
   const [combos, setCombos] = useState([]);
   const [editingId, setEditingId] = useState(null);
   const [showAddForm, setShowAddForm] = useState(false);
-  const [formData, setFormData] = useState({ name: '', price: '', category: '', description: '', fabricType: '', texture: '', quality: '', care: '', images: [] });
+  const [formData, setFormData] = useState({ name: '', price: '', category: '', description: '', material: '', style: '', quality: '', care: '', images: [] });
   const [comboFormData, setComboFormData] = useState({ name: '', description: '', products: [], originalPrice: '', comboPrice: '', savings: '', images: [], existingImages: [], popular: false });
   const [editingComboId, setEditingComboId] = useState(null);
   const [deletingComboId, setDeletingComboId] = useState(null);
@@ -92,7 +92,7 @@ const AdminPanel = ({ onLogout }) => {
       // Clear cache to ensure frontend updates immediately
       cache.clear('products');
       fetchProducts();
-      setFormData({ name: '', price: '', category: '', description: '', fabricType: '', texture: '', quality: '', care: '', images: [] });
+      setFormData({ name: '', price: '', category: '', description: '', material: '', style: '', quality: '', care: '', images: [] });
       setEditingId(null);
       setShowAddForm(false);
     } catch (error) {
@@ -108,8 +108,8 @@ const AdminPanel = ({ onLogout }) => {
       price: product.price,
       category: product.category,
       description: product.description || '',
-      fabricType: product.fabricType || '',
-      texture: product.texture || '',
+      material: product.material || product.fabricType || '',
+      style: product.style || product.texture || '',
       quality: product.quality || '',
       care: product.care || '',
       images: []
@@ -289,32 +289,34 @@ const AdminPanel = ({ onLogout }) => {
       <div className="max-w-7xl mx-auto p-4 sm:p-8 lg:p-12">
         {/* Navigation Tabs */}
         {!showAddForm && !showPasswordForm && !showEmailForm && (
-          <div className="mb-12 flex justify-center sm:justify-start">
-            <div className="bg-white/40 backdrop-blur-md border border-peach-100 rounded-[2rem] p-2 inline-flex shadow-sm">
+          <div className="mb-8 sm:mb-12 flex justify-center sm:justify-start">
+            <div className="bg-white/40 backdrop-blur-md border border-peach-100 rounded-2xl sm:rounded-[2rem] p-1.5 sm:p-2 inline-flex w-full sm:w-auto shadow-sm">
               <button
                 onClick={() => setActiveTab('products')}
-                className={`relative flex items-center space-x-3 px-8 py-3 rounded-[1.5rem] text-xs font-bold uppercase tracking-widest transition-all duration-500 overflow-hidden group ${activeTab === 'products'
-                  ? 'bg-gray-900 text-white shadow-xl scale-105'
+                className={`relative flex items-center justify-center sm:justify-start space-x-2 sm:space-x-3 flex-1 sm:flex-auto px-4 sm:px-8 py-2.5 sm:py-3 rounded-xl sm:rounded-[1.5rem] text-[10px] sm:text-xs font-bold uppercase tracking-wider sm:tracking-widest transition-all duration-500 overflow-hidden group ${activeTab === 'products'
+                  ? 'bg-gray-900 text-white shadow-xl scale-[1.02] sm:scale-105'
                   : 'text-gray-400 hover:text-gray-900'
                   }`}
               >
-                <FaHome className={`text-sm transition-transform duration-500 ${activeTab === 'products' ? 'text-peach-200' : 'group-hover:scale-110'}`} />
-                <span>Full Collection</span>
-                <span className={`ml-2 text-[10px] px-2.5 py-0.5 rounded-full transition-colors ${activeTab === 'products' ? 'bg-white/10 text-peach-200' : 'bg-gray-200 text-gray-400'
+                <FaHome className={`text-xs sm:text-sm transition-transform duration-500 ${activeTab === 'products' ? 'text-peach-200' : 'group-hover:scale-110'}`} />
+                <span className="hidden xs:inline">Collection</span>
+                <span className="xs:hidden">Items</span>
+                <span className={`ml-1 sm:ml-2 text-[9px] sm:text-[10px] px-1.5 sm:px-2.5 py-0.5 rounded-full transition-colors ${activeTab === 'products' ? 'bg-white/10 text-peach-200' : 'bg-gray-200 text-gray-400'
                   }`}>
                   {products.length}
                 </span>
               </button>
               <button
                 onClick={() => setActiveTab('combos')}
-                className={`relative flex items-center space-x-3 px-8 py-3 rounded-[1.5rem] text-xs font-bold uppercase tracking-widest transition-all duration-500 overflow-hidden group ${activeTab === 'combos'
-                  ? 'bg-gray-900 text-white shadow-xl scale-105'
+                className={`relative flex items-center justify-center sm:justify-start space-x-2 sm:space-x-3 flex-1 sm:flex-auto px-4 sm:px-8 py-2.5 sm:py-3 rounded-xl sm:rounded-[1.5rem] text-[10px] sm:text-xs font-bold uppercase tracking-wider sm:tracking-widest transition-all duration-500 overflow-hidden group ${activeTab === 'combos'
+                  ? 'bg-gray-900 text-white shadow-xl scale-[1.02] sm:scale-105'
                   : 'text-gray-400 hover:text-gray-900'
                   }`}
               >
-                <FaBoxes className={`text-sm transition-transform duration-500 ${activeTab === 'combos' ? 'text-peach-200' : 'group-hover:scale-110'}`} />
-                <span>Curated Ensembles</span>
-                <span className={`ml-2 text-[10px] px-2.5 py-0.5 rounded-full transition-colors ${activeTab === 'combos' ? 'bg-white/10 text-peach-200' : 'bg-gray-200 text-gray-400'
+                <FaBoxes className={`text-xs sm:text-sm transition-transform duration-500 ${activeTab === 'combos' ? 'text-peach-200' : 'group-hover:scale-110'}`} />
+                <span className="hidden xs:inline">Ensembles</span>
+                <span className="xs:hidden">Sets</span>
+                <span className={`ml-1 sm:ml-2 text-[9px] sm:text-[10px] px-1.5 sm:px-2.5 py-0.5 rounded-full transition-colors ${activeTab === 'combos' ? 'bg-white/10 text-peach-200' : 'bg-gray-200 text-gray-400'
                   }`}>
                   {combos.length}
                 </span>
@@ -370,7 +372,7 @@ const AdminPanel = ({ onLogout }) => {
               onCancel={() => {
                 setShowAddForm(false);
                 setEditingId(null);
-                setFormData({ name: '', price: '', category: '', description: '', fabricType: '', texture: '', quality: '', care: '', images: [] });
+                setFormData({ name: '', price: '', category: '', description: '', material: '', style: '', quality: '', care: '', images: [] });
               }}
               loading={loading}
             />

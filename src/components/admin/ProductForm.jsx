@@ -8,8 +8,8 @@ const ProductForm = ({ product, onSubmit, onCancel, loading }) => {
     price: product?.price || '',
     category: product?.category || '',
     description: product?.description || '',
-    fabricType: product?.fabricType || '',
-    texture: product?.texture || '',
+    material: product?.material || product?.fabricType || '',
+    style: product?.style || product?.texture || '',
     quality: product?.quality || '',
     care: product?.care || '',
     images: []
@@ -37,8 +37,8 @@ const ProductForm = ({ product, onSubmit, onCancel, loading }) => {
         price: product.price || '',
         category: product.category || '',
         description: product.description || '',
-        fabricType: product.fabricType || '',
-        texture: product.texture || '',
+        material: product.material || product.fabricType || '',
+        style: product.style || product.texture || '',
         quality: product.quality || '',
         care: product.care || '',
         images: []
@@ -156,11 +156,15 @@ const ProductForm = ({ product, onSubmit, onCancel, loading }) => {
                     required
                   >
                     <option value="">Select Category...</option>
-                    <option value="Traditional">Traditional</option>
-                    <option value="Casual">Casual</option>
-                    <option value="Premium">Premium</option>
-                    <option value="Fabrics">Fabrics</option>
-                    <option value="Accessories">Accessories</option>
+                    <option value="Jewelry">Jewelry</option>
+                    <option value="Chains">Chains</option>
+                    <option value="Watches">Watches</option>
+                    <option value="Bags">Bags</option>
+                    <option value="Hair Accessories">Hair Accessories</option>
+                    <option value="Earrings">Earrings</option>
+                    <option value="Bracelets">Bracelets</option>
+                    <option value="Rings">Rings</option>
+                    <option value="Other">Other</option>
                   </select>
                 </div>
               </div>
@@ -248,24 +252,24 @@ const ProductForm = ({ product, onSubmit, onCancel, loading }) => {
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <label className={labelClasses}>Material Composition</label>
+                  <label className={labelClasses}>Material</label>
                   <input
                     type="text"
-                    placeholder="e.g., 24K Gold, Italian Silk"
-                    value={formData.fabricType}
-                    onChange={(e) => setFormData({ ...formData, fabricType: e.target.value })}
+                    placeholder="e.g., 24K Gold, Sterling Silver, Stainless Steel"
+                    value={formData.material}
+                    onChange={(e) => setFormData({ ...formData, material: e.target.value })}
                     className={inputClasses}
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className={labelClasses}>Tactile Finish</label>
+                  <label className={labelClasses}>Style</label>
                   <input
                     type="text"
-                    placeholder="e.g., Polished, Ultra-Soft"
-                    value={formData.texture}
-                    onChange={(e) => setFormData({ ...formData, texture: e.target.value })}
+                    placeholder="e.g., Minimalist, Vintage, Boho, Luxury"
+                    value={formData.style}
+                    onChange={(e) => setFormData({ ...formData, style: e.target.value })}
                     className={inputClasses}
                   />
                 </div>
@@ -273,7 +277,7 @@ const ProductForm = ({ product, onSubmit, onCancel, loading }) => {
                   <label className={labelClasses}>Grade & Quality</label>
                   <input
                     type="text"
-                    placeholder="e.g., Heirloom Grade"
+                    placeholder="e.g., Premium, Standard, Luxury"
                     value={formData.quality}
                     onChange={(e) => setFormData({ ...formData, quality: e.target.value })}
                     className={inputClasses}
@@ -283,7 +287,7 @@ const ProductForm = ({ product, onSubmit, onCancel, loading }) => {
                   <label className={labelClasses}>Preservation</label>
                   <input
                     type="text"
-                    placeholder="e.g., Clean with Soft Cloth"
+                    placeholder="e.g., Avoid water, clean with soft cloth"
                     value={formData.care}
                     onChange={(e) => setFormData({ ...formData, care: e.target.value })}
                     className={inputClasses}

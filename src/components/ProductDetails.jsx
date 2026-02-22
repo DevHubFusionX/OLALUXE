@@ -194,21 +194,21 @@ const ProductDetails = () => {
               </div>
             )}
 
-            {/* Fabric Details */}
-            {(product.fabricType || product.texture || product.quality || product.care) && (
+            {/* Product Details */}
+            {((product.material || product.fabricType) || (product.style || product.texture) || product.quality || product.care) && (
               <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-sm">
                 <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-3 sm:mb-4">Product Details</h3>
                 <div className="space-y-3 sm:space-y-4">
-                  {product.fabricType && (
+                  {(product.material || product.fabricType) && (
                     <div className="flex flex-col sm:flex-row sm:justify-between py-2 border-b border-gray-100 gap-1 sm:gap-2">
-                      <span className="font-medium text-gray-700 text-sm sm:text-base">Fabric Type</span>
-                      <span className="text-gray-900 text-sm sm:text-base">{product.fabricType}</span>
+                      <span className="font-medium text-gray-700 text-sm sm:text-base">Material</span>
+                      <span className="text-gray-900 text-sm sm:text-base">{product.material || product.fabricType}</span>
                     </div>
                   )}
-                  {product.texture && (
+                  {(product.style || product.texture) && (
                     <div className="flex flex-col sm:flex-row sm:justify-between py-2 border-b border-gray-100 gap-1 sm:gap-2">
-                      <span className="font-medium text-gray-700 text-sm sm:text-base">Texture</span>
-                      <span className="text-gray-900 text-sm sm:text-base">{product.texture}</span>
+                      <span className="font-medium text-gray-700 text-sm sm:text-base">Style</span>
+                      <span className="text-gray-900 text-sm sm:text-base">{product.style || product.texture}</span>
                     </div>
                   )}
                   {product.quality && (
