@@ -1,15 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { FaHome, FaBoxes } from 'react-icons/fa';
 import AdminHeader from './admin/AdminHeader';
 import AdminSidebar from './admin/AdminSidebar';
-import ProductForm from './admin/ProductForm';
-import ProductList from './admin/ProductList';
-import ComboForm from './admin/ComboForm';
-import ComboList from './admin/ComboList';
+import AdminTabs from './admin/AdminTabs';
+import AdminContent from './admin/AdminContent';
+import AdminSecurityModals from './admin/AdminSecurityModals';
 import ComboPreviewModal from './admin/ComboPreviewModal';
-import PasswordForm from './admin/PasswordForm';
-import EmailForm from './admin/EmailForm';
-import EmptyState from './admin/EmptyState';
 import { cache } from '../utils/cache';
 import { API_ENDPOINTS } from '../utils/api';
 
@@ -29,11 +24,7 @@ const AdminPanel = ({ onLogout }) => {
   const [filterPopular, setFilterPopular] = useState(false);
   const [loading, setLoading] = useState(false);
   const [showPasswordForm, setShowPasswordForm] = useState(false);
-  const [passwordData, setPasswordData] = useState({ currentPassword: '', newPassword: '', confirmPassword: '' });
-  const [passwordLoading, setPasswordLoading] = useState(false);
   const [showEmailForm, setShowEmailForm] = useState(false);
-  const [emailData, setEmailData] = useState({ currentPassword: '', newEmail: '' });
-  const [emailLoading, setEmailLoading] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [deletingId, setDeletingId] = useState(null);
 
@@ -71,7 +62,6 @@ const AdminPanel = ({ onLogout }) => {
 
   const handleSubmit = async (formDataToSend) => {
     setLoading(true);
-
     try {
       const url = editingId
         ? `${API_ENDPOINTS.admin.products}/${editingId}`
@@ -89,7 +79,6 @@ const AdminPanel = ({ onLogout }) => {
         return;
       }
 
-      // Clear cache to ensure frontend updates immediately
       cache.clear('products');
       fetchProducts();
       setFormData({ name: '', price: '', category: '', description: '', material: '', style: '', quality: '', care: '', images: [] });
@@ -132,7 +121,6 @@ const AdminPanel = ({ onLogout }) => {
           return;
         }
 
-        // Clear cache to ensure frontend updates immediately
         cache.clear('products');
         fetchProducts();
       } catch (error) {
@@ -262,13 +250,6 @@ const AdminPanel = ({ onLogout }) => {
     }, 0);
   };
 
-  const filteredCombos = combos.filter(combo => {
-    const matchesSearch = combo.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      combo.description.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesFilter = !filterPopular || combo.popular;
-    return matchesSearch && matchesFilter;
-  });
-
   const handleLogout = () => {
     localStorage.removeItem('adminToken');
     onLogout();
@@ -287,189 +268,58 @@ const AdminPanel = ({ onLogout }) => {
       />
 
       <div className="max-w-7xl mx-auto p-4 sm:p-8 lg:p-12">
-        {/* Navigation Tabs */}
-        {!showAddForm && !showPasswordForm && !showEmailForm && (
-          <div className="mb-8 sm:mb-12 flex justify-center sm:justify-start">
-            <div className="bg-white/40 backdrop-blur-md border border-peach-100 rounded-2xl sm:rounded-[2rem] p-1.5 sm:p-2 inline-flex w-full sm:w-auto shadow-sm">
-              <button
-                onClick={() => setActiveTab('products')}
-                className={`relative flex items-center justify-center sm:justify-start space-x-2 sm:space-x-3 flex-1 sm:flex-auto px-4 sm:px-8 py-2.5 sm:py-3 rounded-xl sm:rounded-[1.5rem] text-[10px] sm:text-xs font-bold uppercase tracking-wider sm:tracking-widest transition-all duration-500 overflow-hidden group ${activeTab === 'products'
-                  ? 'bg-gray-900 text-white shadow-xl scale-[1.02] sm:scale-105'
-                  : 'text-gray-400 hover:text-gray-900'
-                  }`}
-              >
-                <FaHome className={`text-xs sm:text-sm transition-transform duration-500 ${activeTab === 'products' ? 'text-peach-200' : 'group-hover:scale-110'}`} />
-                <span className="hidden xs:inline">Collection</span>
-                <span className="xs:hidden">Items</span>
-                <span className={`ml-1 sm:ml-2 text-[9px] sm:text-[10px] px-1.5 sm:px-2.5 py-0.5 rounded-full transition-colors ${activeTab === 'products' ? 'bg-white/10 text-peach-200' : 'bg-gray-200 text-gray-400'
-                  }`}>
-                  {products.length}
-                </span>
-              </button>
-              <button
-                onClick={() => setActiveTab('combos')}
-                className={`relative flex items-center justify-center sm:justify-start space-x-2 sm:space-x-3 flex-1 sm:flex-auto px-4 sm:px-8 py-2.5 sm:py-3 rounded-xl sm:rounded-[1.5rem] text-[10px] sm:text-xs font-bold uppercase tracking-wider sm:tracking-widest transition-all duration-500 overflow-hidden group ${activeTab === 'combos'
-                  ? 'bg-gray-900 text-white shadow-xl scale-[1.02] sm:scale-105'
-                  : 'text-gray-400 hover:text-gray-900'
-                  }`}
-              >
-                <FaBoxes className={`text-xs sm:text-sm transition-transform duration-500 ${activeTab === 'combos' ? 'text-peach-200' : 'group-hover:scale-110'}`} />
-                <span className="hidden xs:inline">Ensembles</span>
-                <span className="xs:hidden">Sets</span>
-                <span className={`ml-1 sm:ml-2 text-[9px] sm:text-[10px] px-1.5 sm:px-2.5 py-0.5 rounded-full transition-colors ${activeTab === 'combos' ? 'bg-white/10 text-peach-200' : 'bg-gray-200 text-gray-400'
-                  }`}>
-                  {combos.length}
-                </span>
-              </button>
-            </div>
-          </div>
-        )}
+        <AdminTabs
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+          productCount={products.length}
+          comboCount={combos.length}
+        />
 
-        {/* Content Area */}
-        <div className="space-y-10 animate-fade-in">
-          {/* Main List Views */}
-          {!showAddForm && !showPasswordForm && !showEmailForm && (
-            <>
-              {activeTab === 'products' ? (
-                products.length > 0 ? (
-                  <ProductList
-                    products={products}
-                    onEdit={handleEdit}
-                    onDelete={handleDelete}
-                    deletingId={deletingId}
-                    onAddNew={() => setShowAddForm(true)}
-                  />
-                ) : (
-                  <EmptyState activeTab="products" onAddNew={() => setShowAddForm(true)} />
-                )
-              ) : (
-                combos.length > 0 ? (
-                  <ComboList
-                    combos={combos}
-                    searchTerm={searchTerm}
-                    setSearchTerm={setSearchTerm}
-                    filterPopular={filterPopular}
-                    setFilterPopular={setFilterPopular}
-                    onEdit={handleEditCombo}
-                    onDelete={handleDeleteCombo}
-                    onPreview={handlePreviewCombo}
-                    editingId={editingComboId}
-                    deletingId={deletingComboId}
-                    onAddNew={() => setShowAddForm(true)}
-                  />
-                ) : (
-                  <EmptyState activeTab="combos" onAddNew={() => setShowAddForm(true)} />
-                )
-              )}
-            </>
-          )}
-
-          {/* Form Overlay Views */}
-          {showAddForm && activeTab === 'products' && (
-            <ProductForm
-              product={editingId ? products.find(p => p._id === editingId) : null}
-              onSubmit={handleSubmit}
-              onCancel={() => {
-                setShowAddForm(false);
-                setEditingId(null);
-                setFormData({ name: '', price: '', category: '', description: '', material: '', style: '', quality: '', care: '', images: [] });
-              }}
-              loading={loading}
-            />
-          )}
-
-          {showAddForm && activeTab === 'combos' && (
-            <div className="bg-white/60 backdrop-blur-xl rounded-[3rem] shadow-2xl border border-peach-100/50 overflow-hidden animate-scale-in">
-              <ComboForm
-                formData={comboFormData}
-                setFormData={setComboFormData}
-                products={products}
-                onSubmit={handleSubmitCombo}
-                onCancel={resetComboForm}
-                loading={loading}
-                isEditing={!!editingComboId}
-                onPreview={handlePreviewCombo}
-                calculatePrice={calculateTotalOriginalPrice}
-              />
-            </div>
-          )}
-
-          {showPasswordForm && (
-            <PasswordForm
-              passwordData={passwordData}
-              setPasswordData={setPasswordData}
-              onSubmit={async (e) => {
-                e.preventDefault();
-                if (passwordData.newPassword !== passwordData.confirmPassword) {
-                  alert('New passwords do not match');
-                  return;
-                }
-                setPasswordLoading(true);
-                try {
-                  const response = await fetch(API_ENDPOINTS.admin.changePassword, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json', ...getAuthHeaders() },
-                    body: JSON.stringify({ currentPassword: passwordData.currentPassword, newPassword: passwordData.newPassword })
-                  });
-                  if (response.ok) {
-                    alert('Password changed successfully');
-                    setShowPasswordForm(false);
-                    setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' });
-                  } else {
-                    const data = await response.json();
-                    alert(data.error);
-                  }
-                } catch (error) {
-                  alert('Failed to change password');
-                } finally {
-                  setPasswordLoading(false);
-                }
-              }}
-              onCancel={() => { setShowPasswordForm(false); setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' }); }}
-              loading={passwordLoading}
-            />
-          )}
-
-          {showEmailForm && (
-            <EmailForm
-              emailData={emailData}
-              setEmailData={setEmailData}
-              onSubmit={async (e) => {
-                e.preventDefault();
-                setEmailLoading(true);
-                try {
-                  const response = await fetch(API_ENDPOINTS.admin.changeEmail, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json', ...getAuthHeaders() },
-                    body: JSON.stringify({ currentPassword: emailData.currentPassword, newEmail: emailData.newEmail })
-                  });
-                  if (response.ok) {
-                    alert('Email changed successfully');
-                    setShowEmailForm(false);
-                    setEmailData({ currentPassword: '', newEmail: '' });
-                  } else {
-                    const data = await response.json();
-                    alert(data.error);
-                  }
-                } catch (error) {
-                  alert('Failed to change email');
-                } finally {
-                  setEmailLoading(false);
-                }
-              }}
-              onCancel={() => { setShowEmailForm(false); setEmailData({ currentPassword: '', newEmail: '' }); }}
-              loading={emailLoading}
-            />
-          )}
-        </div>
+        <AdminContent
+          activeTab={activeTab}
+          showAddForm={showAddForm}
+          products={products}
+          combos={combos}
+          editingId={editingId}
+          deletingId={deletingId}
+          editingComboId={editingComboId}
+          deletingComboId={deletingComboId}
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+          filterPopular={filterPopular}
+          setFilterPopular={setFilterPopular}
+          handleEdit={handleEdit}
+          handleDelete={handleDelete}
+          handleEditCombo={handleEditCombo}
+          handleDeleteCombo={handleDeleteCombo}
+          handlePreviewCombo={handlePreviewCombo}
+          handleSubmit={handleSubmit}
+          handleSubmitCombo={handleSubmitCombo}
+          resetComboForm={resetComboForm}
+          setShowAddForm={setShowAddForm}
+          setEditingId={setEditingId}
+          setFormData={setFormData}
+          comboFormData={comboFormData}
+          setComboFormData={setComboFormData}
+          calculateTotalOriginalPrice={calculateTotalOriginalPrice}
+          loading={loading}
+        />
       </div>
 
-      {/* Combo Preview Modal */}
       <ComboPreviewModal
         combo={previewCombo}
         isOpen={showComboPreview}
         onClose={() => setShowComboPreview(false)}
         onEdit={handleEditCombo}
+      />
+
+      <AdminSecurityModals
+        showPasswordForm={showPasswordForm}
+        setShowPasswordForm={setShowPasswordForm}
+        showEmailForm={showEmailForm}
+        setShowEmailForm={setShowEmailForm}
+        getAuthHeaders={getAuthHeaders}
+        onLogout={onLogout}
       />
 
       <AdminSidebar
