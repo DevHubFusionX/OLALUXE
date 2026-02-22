@@ -1,7 +1,7 @@
 import React from 'react';
 import { FaTimes } from 'react-icons/fa';
 
-const AdminSettingsModal = ({ title, isOpen, onClose, children }) => {
+const AdminSettingsModal = ({ title, isOpen, onClose, children, maxWidth = 'max-w-lg' }) => {
     if (!isOpen) return null;
 
     return (
@@ -10,7 +10,7 @@ const AdminSettingsModal = ({ title, isOpen, onClose, children }) => {
             onClick={onClose}
         >
             <div
-                className="bg-white/90 backdrop-blur-xl rounded-[2.5rem] max-w-lg w-full shadow-2xl border border-peach-100/50 overflow-hidden animate-scale-in"
+                className={`bg-white/90 backdrop-blur-xl rounded-2xl ${maxWidth} w-full shadow-2xl border border-peach-100/50 overflow-hidden animate-scale-in`}
                 onClick={(e) => e.stopPropagation()}
             >
                 {/* Modal Header */}

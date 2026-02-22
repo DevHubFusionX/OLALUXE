@@ -10,7 +10,7 @@ const ProductList = ({
   onAddNew
 }) => {
   return (
-    <div className="bg-white/60 backdrop-blur-md rounded-3xl shadow-sm border border-peach-100 overflow-hidden">
+    <div className="bg-white/60 backdrop-blur-md rounded-2xl shadow-sm border border-peach-100 overflow-hidden relative">
       <div className="p-5 sm:p-6 border-b border-peach-50 bg-gradient-to-r from-white/40 to-transparent">
         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
           <div>

@@ -2,9 +2,11 @@ import React from 'react';
 import { FaWhatsapp, FaStar } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import Button from './Button';
+import { useCart } from '../../context/CartContext';
 
 const ComboCard = ({ combo, showActions = false, onEdit, onDelete }) => {
   const navigate = useNavigate();
+  const { addToCart } = useCart();
 
   const handleCardClick = () => {
     if (!showActions) {
@@ -87,18 +89,36 @@ const ComboCard = ({ combo, showActions = false, onEdit, onDelete }) => {
               </Button>
             </div>
           ) : (
-            <Button
-              variant="whatsapp"
-              className="w-full"
-              size="sm"
-              icon={<FaWhatsapp size={16} />}
-              onClick={(e) => {
-                e.stopPropagation();
-                window.open(`https://wa.me/2349120491702?text=Hi, I'm interested in the ${combo.name} combo for ${combo.comboPrice}`, '_blank');
-              }}
-            >
-              Order Combo
-            </Button>
+            <div className="flex gap-2">
+              <Button
+                variant="primary"
+                className="flex-1"
+                size="sm"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  const images = combo.images || (combo.image ? [combo.image] : []);
+                  addToCart({
+                    ...combo,
+                    price: combo.comboPrice,
+                    image: images[0],
+                    itemType: 'Combo'
+                  });
+                }}
+              >
+                Add to Cart
+              </Button>
+              <Button
+                variant="whatsapp"
+                className="w-10 h-10 p-0 flex items-center justify-center bg-beige-50 border border-peach-100 text-green-600 hover:bg-white transition-all shadow-sm"
+                size="sm"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  window.open(`https://wa.me/2349120491702?text=Hi, I'm interested in the ${combo.name} combo for ${combo.comboPrice}`, '_blank');
+                }}
+              >
+                <FaWhatsapp size={16} />
+              </Button>
+            </div>
           )}
         </div>
       </div>

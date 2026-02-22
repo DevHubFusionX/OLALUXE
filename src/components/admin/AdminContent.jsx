@@ -4,6 +4,7 @@ import ComboList from './ComboList';
 import EmptyState from './EmptyState';
 import ProductForm from './ProductForm';
 import ComboForm from './ComboForm';
+import OrderList from './OrderList';
 
 const AdminContent = ({
     activeTab,
@@ -23,6 +24,7 @@ const AdminContent = ({
     handleEditCombo,
     handleDeleteCombo,
     handlePreviewCombo,
+    handlePreviewOrder,
     handleSubmit,
     handleSubmitCombo,
     resetComboForm,
@@ -32,7 +34,8 @@ const AdminContent = ({
     comboFormData,
     setComboFormData,
     calculateTotalOriginalPrice,
-    loading
+    loading,
+    orders
 }) => {
     return (
         <div className="space-y-10 animate-fade-in">
@@ -51,7 +54,7 @@ const AdminContent = ({
                         ) : (
                             <EmptyState activeTab="products" onAddNew={() => setShowAddForm(true)} />
                         )
-                    ) : (
+                    ) : activeTab === 'combos' ? (
                         combos.length > 0 ? (
                             <ComboList
                                 combos={combos}
@@ -69,6 +72,12 @@ const AdminContent = ({
                         ) : (
                             <EmptyState activeTab="combos" onAddNew={() => setShowAddForm(true)} />
                         )
+                    ) : (
+                        <OrderList
+                            orders={orders}
+                            onPreview={handlePreviewOrder}
+                            loading={loading}
+                        />
                     )}
                 </>
             )}

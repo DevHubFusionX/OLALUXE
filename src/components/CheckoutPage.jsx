@@ -79,7 +79,9 @@ const CheckoutPage = () => {
             };
 
             const itemsData = cartItems.map(item => ({
-                product: { _id: item._id, name: item.name }, // Pass name for email/whatsapp
+                product: item._id, // item ID
+                itemType: item.itemType || 'Product', // 'Product' or 'Combo'
+                name: item.name, // Snapshot of the name
                 quantity: item.quantity,
                 price: parseFloat(item.price.replace(/[^\d.]/g, '')) || 0,
                 color: item.selectedColor,

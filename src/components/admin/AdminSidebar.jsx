@@ -1,5 +1,5 @@
 import React from 'react';
-import { FaPlus, FaKey, FaEnvelope, FaSignOutAlt, FaTimes } from 'react-icons/fa';
+import { FaPlus, FaKey, FaEnvelope, FaSignOutAlt, FaTimes, FaShoppingBag } from 'react-icons/fa';
 
 const AdminSidebar = ({
   isOpen,
@@ -8,7 +8,8 @@ const AdminSidebar = ({
   onAddNew,
   onChangePassword,
   onChangeEmail,
-  onLogout
+  onLogout,
+  onTabChange
 }) => {
   if (!isOpen) return null;
 
@@ -34,6 +35,12 @@ const AdminSidebar = ({
       label: 'Contact Settings',
       icon: FaEnvelope,
       action: onChangeEmail,
+      className: 'text-gray-700 hover:bg-beige-50'
+    },
+    {
+      label: 'View Orders',
+      icon: FaShoppingBag,
+      action: () => onTabChange('orders'),
       className: 'text-gray-700 hover:bg-beige-50'
     },
     {

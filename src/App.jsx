@@ -10,6 +10,7 @@ import AdminDashboard from './components/AdminDashboard';
 import { CartProvider } from './context/CartContext';
 import CartDrawer from './components/CartDrawer';
 import CheckoutPage from './components/CheckoutPage';
+import ScrollToTop from './components/ui/ScrollToTop';
 import './utils/keepServerAlive';
 
 import { useLocation } from 'react-router-dom';
@@ -52,6 +53,7 @@ const App = () => {
   return (
     <CartProvider>
       <Router>
+        <ScrollToTop />
         <AppContent />
       </Router>
     </CartProvider>

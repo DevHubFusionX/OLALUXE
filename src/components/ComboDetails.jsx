@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { FaWhatsapp, FaChevronLeft, FaChevronRight, FaStar } from 'react-icons/fa';
+import { FaWhatsapp, FaChevronLeft, FaChevronRight, FaStar, FaShoppingBag } from 'react-icons/fa';
 import Button from './ui/Button';
 import { API_ENDPOINTS, apiRequest } from '../utils/api';
+import { useCart } from '../context/CartContext';
 
 const ComboDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { addToCart } = useCart();
   const [combo, setCombo] = useState(null);
   const [loading, setLoading] = useState(true);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -55,6 +57,16 @@ const ComboDetails = () => {
   const handleWhatsAppOrder = () => {
     const message = `Hi, I'm interested in the ${combo.name} combo for ${combo.comboPrice}`;
     window.open(`https://wa.me/2349120491702?text=${encodeURIComponent(message)}`, '_blank');
+  };
+
+  const handleAddToCart = () => {
+    // Flag as combo for the checkout/backend
+    addToCart({
+      ...combo,
+      price: combo.comboPrice, // Ensure price is the comboPrice
+      image: images[0], // Ensure an image is present for the cart
+      itemType: 'Combo'
+    });
   };
 
   if (loading) {
@@ -219,16 +231,30 @@ const ComboDetails = () => {
                 <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-2">Ready to Order This Combo?</h3>
                 <p className="text-gray-600 text-sm sm:text-base">Get all these items together and save money!</p>
               </div>
-              <Button
-                variant="primary"
-                size="lg"
-                className="w-full bg-gray-900 hover:bg-black text-white py-4 text-lg font-semibold rounded-full shadow-xl transition-all"
-                icon={<FaWhatsapp size={20} />}
-                onClick={handleWhatsAppOrder}
-              >
-                Order Combo via WhatsApp
-              </Button>
-              <div className="mt-3 sm:mt-4 text-center">
+
+              <div className="space-y-4">
+                <Button
+                  variant="primary"
+                  size="lg"
+                  className="w-full bg-gray-900 hover:bg-black text-white py-4 text-lg font-semibold rounded-full shadow-xl transition-all"
+                  icon={<FaShoppingBag size={20} />}
+                  onClick={handleAddToCart}
+                >
+                  Add Combo to Cart
+                </Button>
+
+                <Button
+                  variant="secondary"
+                  size="lg"
+                  className="w-full border-peach-100 text-gray-700 py-4 text-lg font-semibold rounded-full transition-all"
+                  icon={<FaWhatsapp size={20} />}
+                  onClick={handleWhatsAppOrder}
+                >
+                  Order via WhatsApp
+                </Button>
+              </div>
+
+              <div className="mt-6 text-center">
                 <p className="text-xs sm:text-sm text-gray-500">Fast response • Secure payment • Nationwide delivery</p>
               </div>
             </div>

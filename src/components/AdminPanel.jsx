@@ -5,6 +5,7 @@ import AdminTabs from './admin/AdminTabs';
 import AdminContent from './admin/AdminContent';
 import AdminSecurityModals from './admin/AdminSecurityModals';
 import ComboPreviewModal from './admin/ComboPreviewModal';
+import OrderDetailsModal from './admin/OrderDetailsModal';
 import { cache } from '../utils/cache';
 import { API_ENDPOINTS } from '../utils/api';
 
@@ -27,10 +28,15 @@ const AdminPanel = ({ onLogout }) => {
   const [showEmailForm, setShowEmailForm] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [deletingId, setDeletingId] = useState(null);
+  const [orders, setOrders] = useState([]);
+  const [selectedOrder, setSelectedOrder] = useState(null);
+  const [showOrderDetails, setShowOrderDetails] = useState(false);
+  const [orderLoading, setOrderLoading] = useState(false);
 
   useEffect(() => {
     fetchProducts();
     fetchCombos();
+    fetchOrders();
   }, []);
 
   const getAuthHeaders = () => {
@@ -58,6 +64,47 @@ const AdminPanel = ({ onLogout }) => {
     } catch (error) {
       console.error('Error fetching combos:', error);
     }
+  };
+
+  const fetchOrders = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch(API_ENDPOINTS.orders);
+      const data = await response.json();
+      setOrders(data);
+    } catch (error) {
+      console.error('Error fetching orders:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleUpdateOrderStatus = async (orderId, status) => {
+    setOrderLoading(true);
+    try {
+      const response = await fetch(`${API_ENDPOINTS.orders}/${orderId}/status`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status })
+      });
+      if (response.ok) {
+        alert('Order status updated');
+        fetchOrders();
+        setShowOrderDetails(false);
+      } else {
+        const data = await response.json();
+        alert(data.message || 'Failed to update status');
+      }
+    } catch (error) {
+      alert('Error updating status');
+    } finally {
+      setOrderLoading(false);
+    }
+  };
+
+  const handlePreviewOrder = (order) => {
+    setSelectedOrder(order);
+    setShowOrderDetails(true);
   };
 
   const handleSubmit = async (formDataToSend) => {
@@ -273,6 +320,7 @@ const AdminPanel = ({ onLogout }) => {
           setActiveTab={setActiveTab}
           productCount={products.length}
           comboCount={combos.length}
+          orderCount={orders.length}
         />
 
         <AdminContent
@@ -293,6 +341,7 @@ const AdminPanel = ({ onLogout }) => {
           handleEditCombo={handleEditCombo}
           handleDeleteCombo={handleDeleteCombo}
           handlePreviewCombo={handlePreviewCombo}
+          handlePreviewOrder={handlePreviewOrder}
           handleSubmit={handleSubmit}
           handleSubmitCombo={handleSubmitCombo}
           resetComboForm={resetComboForm}
@@ -303,6 +352,7 @@ const AdminPanel = ({ onLogout }) => {
           setComboFormData={setComboFormData}
           calculateTotalOriginalPrice={calculateTotalOriginalPrice}
           loading={loading}
+          orders={orders}
         />
       </div>
 
@@ -311,6 +361,14 @@ const AdminPanel = ({ onLogout }) => {
         isOpen={showComboPreview}
         onClose={() => setShowComboPreview(false)}
         onEdit={handleEditCombo}
+      />
+
+      <OrderDetailsModal
+        order={selectedOrder}
+        isOpen={showOrderDetails}
+        onClose={() => setShowOrderDetails(false)}
+        onUpdateStatus={handleUpdateOrderStatus}
+        loading={orderLoading}
       />
 
       <AdminSecurityModals
@@ -330,6 +388,7 @@ const AdminPanel = ({ onLogout }) => {
         onChangePassword={() => setShowPasswordForm(true)}
         onChangeEmail={() => setShowEmailForm(true)}
         onLogout={handleLogout}
+        onTabChange={setActiveTab}
       />
     </div>
   );

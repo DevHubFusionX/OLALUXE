@@ -23,7 +23,7 @@ const ComboList = ({
   });
 
   return (
-    <div className="bg-white/60 backdrop-blur-md rounded-3xl shadow-sm border border-peach-100 overflow-hidden">
+    <div className="bg-white/60 backdrop-blur-md rounded-2xl shadow-sm border border-peach-100 overflow-hidden">
       <div className="p-5 sm:p-6 border-b border-peach-50 bg-gradient-to-r from-white/40 to-transparent">
         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
           <div>
@@ -113,7 +113,7 @@ const ComboList = ({
 
         {/* Combo Statistics */}
         {combos.length > 0 && (
-          <div className="mt-10 p-6 bg-gray-900 rounded-3xl border border-white/10 shadow-xl overflow-hidden relative">
+          <div className="mt-10 p-6 bg-gray-900 rounded-2xl border border-white/10 shadow-xl overflow-hidden relative">
             <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-peach-200/10 to-transparent rounded-full -mr-32 -mt-32 blur-3xl"></div>
             <div className="relative grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
               <div className="text-center md:text-left">
