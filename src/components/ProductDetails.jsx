@@ -269,7 +269,7 @@ const ProductDetails = () => {
                 </Button>
               </div>
               <div className="mt-6 text-center">
-                <p className="text-xs sm:text-sm text-gray-500 font-light">Fast response • Secure payment • Nationwide delivery</p>
+                <p className="text-xs sm:text-sm text-gray-500 font-light">Fast response • Secure booking • Premium quality</p>
               </div>
             </div>
           </div>

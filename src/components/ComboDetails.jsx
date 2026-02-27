@@ -12,8 +12,9 @@ const ComboDetails = () => {
   const [combo, setCombo] = useState(null);
   const [loading, setLoading] = useState(true);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [selectedColor, setSelectedColor] = useState(null);
 
-  const images = combo?.images || (combo?.image ? [combo.image] : []);
+  const images = selectedColor?.images?.length > 0 ? selectedColor.images : (combo?.images || (combo?.image ? [combo.image] : []));
 
   const nextImage = () => {
     if (images.length > 0) {
@@ -37,6 +38,9 @@ const ComboDetails = () => {
       const data = await apiRequest(`${API_ENDPOINTS.combos}/${id}`);
       console.log('Combo data received:', data);
       setCombo(data);
+      if (data.colors?.length > 0) {
+        setSelectedColor(data.colors[0]);
+      }
     } catch (error) {
       console.error('Error fetching combo:', error);
       // If combo not found in database, try to find it in the generated combos
@@ -55,8 +59,14 @@ const ComboDetails = () => {
   };
 
   const handleWhatsAppOrder = () => {
-    const message = `Hi, I'm interested in the ${combo.name} combo for ${combo.comboPrice}`;
+    const colorText = selectedColor ? ` in ${selectedColor.name}` : '';
+    const message = `Hi, I'm interested in the ${combo.name}${colorText} combo for ${combo.comboPrice}`;
     window.open(`https://wa.me/2349120491702?text=${encodeURIComponent(message)}`, '_blank');
+  };
+
+  const handleColorSelect = (color) => {
+    setSelectedColor(color);
+    setCurrentImageIndex(0);
   };
 
   const handleAddToCart = () => {
@@ -65,7 +75,8 @@ const ComboDetails = () => {
       ...combo,
       price: combo.comboPrice, // Ensure price is the comboPrice
       image: images[0], // Ensure an image is present for the cart
-      itemType: 'Combo'
+      itemType: 'Combo',
+      selectedColor: selectedColor?.name
     });
   };
 

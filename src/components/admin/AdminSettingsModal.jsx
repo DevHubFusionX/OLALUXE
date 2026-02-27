@@ -14,20 +14,20 @@ const AdminSettingsModal = ({ title, isOpen, onClose, children, maxWidth = 'max-
                 onClick={(e) => e.stopPropagation()}
             >
                 {/* Modal Header */}
-                <div className="px-8 pt-8 pb-4 flex justify-between items-center bg-gradient-to-b from-peach-50/50 to-transparent">
-                    <h3 className="text-xl font-serif font-bold text-gray-900 tracking-wide uppercase">
+                <div className="px-5 sm:px-8 pt-6 sm:pt-8 pb-3 sm:pb-4 flex justify-between items-center bg-gradient-to-b from-peach-50/50 to-transparent">
+                    <h3 className="text-lg sm:text-xl font-serif font-bold text-gray-900 tracking-wide uppercase">
                         {title}
                     </h3>
                     <button
                         onClick={onClose}
-                        className="p-2.5 bg-beige-50 hover:bg-peach-100 text-gray-500 hover:text-gray-900 rounded-full transition-all duration-300 active:scale-95 group"
+                        className="p-2 sm:p-2.5 bg-beige-50 hover:bg-peach-100 text-gray-500 hover:text-gray-900 rounded-full transition-all duration-300 active:scale-95 group"
                     >
-                        <FaTimes className="group-hover:rotate-90 transition-transform duration-300" size={16} />
+                        <FaTimes className="group-hover:rotate-90 transition-transform duration-300" size={14} />
                     </button>
                 </div>
 
                 {/* Modal Content */}
-                <div className="px-8 pb-8 pt-2">
+                <div className="px-5 sm:px-8 pb-6 sm:pb-8 pt-1 sm:pt-2">
                     {children}
                 </div>
             </div>

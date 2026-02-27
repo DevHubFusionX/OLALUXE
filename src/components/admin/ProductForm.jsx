@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { FaSave, FaTimes, FaPlus, FaTrash, FaBoxes, FaChevronRight, FaChevronLeft, FaCheckCircle } from 'react-icons/fa';
 import Button from '../ui/Button';
+import { FaImage } from 'react-icons/fa';
 
 const ProductForm = ({ product, onSubmit, onCancel, loading }) => {
   const [formData, setFormData] = useState({
@@ -12,11 +13,14 @@ const ProductForm = ({ product, onSubmit, onCancel, loading }) => {
     style: product?.style || product?.texture || '',
     quality: product?.quality || '',
     care: product?.care || '',
+    colors: product?.colors || [],
     images: []
   });
   const [previews, setPreviews] = useState([]);
   const [keptImages, setKeptImages] = useState(product?.images || (product?.image ? [product.image] : []));
   const [currentStep, setCurrentStep] = useState(1);
+  const [newColor, setNewColor] = useState('');
+  const [activeColorIdx, setActiveColorIdx] = useState(null);
 
   React.useEffect(() => {
     if (!formData.images || formData.images.length === 0) {
@@ -41,11 +45,40 @@ const ProductForm = ({ product, onSubmit, onCancel, loading }) => {
         style: product.style || product.texture || '',
         quality: product.quality || '',
         care: product.care || '',
+        colors: product.colors || [],
         images: []
       });
       setKeptImages(product.images || (product.image ? [product.image] : []));
     }
   }, [product]);
+
+  const addColor = () => {
+    if (newColor.trim()) {
+      setFormData({
+        ...formData,
+        colors: [...formData.colors, { name: newColor.trim(), images: [] }]
+      });
+      setNewColor('');
+    }
+  };
+
+  const removeColor = (index) => {
+    const updatedColors = formData.colors.filter((_, i) => i !== index);
+    setFormData({ ...formData, colors: updatedColors });
+  };
+
+  const toggleImageForColor = (colorIdx, imageUrl) => {
+    const updatedColors = [...formData.colors];
+    const color = updatedColors[colorIdx];
+    if (color.images.includes(imageUrl)) {
+      color.images = color.images.filter(img => img !== imageUrl);
+    } else {
+      color.images = [...color.images, imageUrl];
+    }
+    setFormData({ ...formData, colors: updatedColors });
+  };
+
+  const allAvailableImages = [...keptImages, ...previews];
 
   const handleSubmit = (e) => {
     if (e) e.preventDefault();
@@ -56,6 +89,8 @@ const ProductForm = ({ product, onSubmit, onCancel, loading }) => {
         if (formData.images && formData.images.length > 0) {
           formData.images.forEach(image => submitData.append('images', image));
         }
+      } else if (key === 'colors') {
+        submitData.append('colors', JSON.stringify(formData.colors));
       } else {
         submitData.append(key, formData[key]);
       }
@@ -238,7 +273,7 @@ const ProductForm = ({ product, onSubmit, onCancel, loading }) => {
             </div>
           )}
 
-          {/* Step 3: Specifications */}
+          {/* Step 3: Specifications & Variation */}
           {currentStep === 3 && (
             <div className="space-y-8 animate-slide-up">
               <div className="space-y-2">
@@ -250,6 +285,81 @@ const ProductForm = ({ product, onSubmit, onCancel, loading }) => {
                   rows={4}
                   className={`${inputClasses} resize-none min-h-[120px]`}
                 />
+              </div>
+
+              {/* Color Variation Section */}
+              <div className="bg-beige-50/50 p-6 rounded-[2rem] border border-peach-100/50 space-y-4">
+                <label className={labelClasses}>Color Variations</label>
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    placeholder="Add color (e.g., Gold, Emerald)"
+                    value={newColor}
+                    onChange={(e) => setNewColor(e.target.value)}
+                    onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addColor())}
+                    className={`${inputClasses} flex-1`}
+                  />
+                  <button
+                    type="button"
+                    onClick={addColor}
+                    className="bg-gray-900 text-white px-6 rounded-2xl font-bold hover:bg-black transition-all"
+                  >
+                    Add
+                  </button>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {formData.colors.map((color, idx) => (
+                    <div key={idx} className="flex flex-col gap-2">
+                      <div className="bg-white border border-peach-100 px-4 py-2 rounded-full flex items-center gap-2 shadow-sm animate-scale-in">
+                        <span className="text-sm font-medium text-gray-700">{color.name}</span>
+                        <button
+                          type="button"
+                          onClick={() => setActiveColorIdx(activeColorIdx === idx ? null : idx)}
+                          className={`p-1 rounded-full transition-colors ${color.images.length > 0 ? 'text-gold-600 bg-gold-50' : 'text-gray-400 hover:bg-gray-100'}`}
+                          title="Manage Images for this Color"
+                        >
+                          <FaImage size={14} />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => removeColor(idx)}
+                          className="text-gray-400 hover:text-red-500 transition-colors ml-1"
+                        >
+                          <FaTimes size={10} />
+                        </button>
+                      </div>
+
+                      {activeColorIdx === idx && (
+                        <div className="bg-white/80 backdrop-blur-md p-4 rounded-2xl border border-peach-100 shadow-inner mt-1 animate-slide-up">
+                          <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-3">Map Images to {color.name}</p>
+                          <div className="grid grid-cols-4 sm:grid-cols-6 gap-2">
+                            {allAvailableImages.map((img, imgIdx) => (
+                              <button
+                                key={imgIdx}
+                                type="button"
+                                onClick={() => toggleImageForColor(idx, img)}
+                                className={`relative aspect-square rounded-lg overflow-hidden border-2 transition-all ${color.images.includes(img) ? 'border-gold-500 ring-2 ring-gold-100' : 'border-transparent hover:border-peach-200'}`}
+                              >
+                                <img src={img} className="w-full h-full object-cover" alt="Select" />
+                                {color.images.includes(img) && (
+                                  <div className="absolute inset-0 bg-gold-500/20 flex items-center justify-center">
+                                    <FaCheckCircle className="text-white drop-shadow-md" size={16} />
+                                  </div>
+                                )}
+                              </button>
+                            ))}
+                          </div>
+                          {allAvailableImages.length === 0 && (
+                            <p className="text-[10px] text-gray-400 italic">Upload images in Step 2 first.</p>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                  {formData.colors.length === 0 && (
+                    <p className="text-[10px] text-gray-400 italic">No color variations added yet.</p>
+                  )}
+                </div>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -299,14 +409,14 @@ const ProductForm = ({ product, onSubmit, onCancel, loading }) => {
 
           {/* Step 4: Final Review */}
           {currentStep === 4 && (
-            <div className="animate-slide-up space-y-10">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+            <div className="animate-slide-up space-y-6 sm:space-y-10">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-10">
                 {/* Visual Inventory */}
-                <div className="space-y-4">
-                  <h4 className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Exhibition Assets ({keptImages.length + previews.length})</h4>
-                  <div className="grid grid-cols-3 gap-3">
+                <div className="space-y-3 sm:space-y-4">
+                  <h4 className="text-[9px] sm:text-[10px] font-bold text-gray-400 uppercase tracking-widest">Exhibition Assets ({keptImages.length + previews.length})</h4>
+                  <div className="grid grid-cols-3 sm:grid-cols-3 gap-2 sm:gap-3">
                     {[...keptImages, ...previews].map((img, i) => (
-                      <div key={i} className="aspect-square rounded-xl overflow-hidden border border-peach-50 shadow-sm">
+                      <div key={i} className="aspect-square rounded-lg sm:rounded-xl overflow-hidden border border-peach-50 shadow-sm">
                         <img src={img} className="w-full h-full object-cover" alt="Review" />
                       </div>
                     ))}
@@ -314,34 +424,34 @@ const ProductForm = ({ product, onSubmit, onCancel, loading }) => {
                 </div>
 
                 {/* Data Overview */}
-                <div className="bg-beige-50/50 p-8 rounded-3xl border border-peach-100/50 space-y-6">
-                  <h4 className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Archival Summary</h4>
-                  <div className="space-y-4">
+                <div className="bg-beige-50/50 p-5 sm:p-8 rounded-2xl sm:rounded-3xl border border-peach-100/50 space-y-4 sm:space-y-6">
+                  <h4 className="text-[9px] sm:text-[10px] font-bold text-gray-400 uppercase tracking-widest">Archival Summary</h4>
+                  <div className="space-y-3 sm:space-y-4">
                     <div>
-                      <p className="text-[10px] font-bold text-gold-600 uppercase tracking-widest mb-1">Identity</p>
-                      <p className="text-xl font-serif font-bold text-gray-900">{formData.name}</p>
+                      <p className="text-[9px] sm:text-[10px] font-bold text-gold-600 uppercase tracking-widest mb-1">Identity</p>
+                      <p className="text-lg sm:text-xl font-serif font-bold text-gray-900">{formData.name}</p>
                     </div>
-                    <div className="flex gap-10">
+                    <div className="flex gap-6 sm:gap-10">
                       <div>
-                        <p className="text-[10px] font-bold text-gold-600 uppercase tracking-widest mb-1">Valuation</p>
-                        <p className="text-lg font-serif font-bold text-gray-900">{formData.price}</p>
+                        <p className="text-[9px] sm:text-[10px] font-bold text-gold-600 uppercase tracking-widest mb-1">Valuation</p>
+                        <p className="text-base sm:text-lg font-serif font-bold text-gray-900">{formData.price}</p>
                       </div>
                       <div>
-                        <p className="text-[10px] font-bold text-gold-600 uppercase tracking-widest mb-1">Class</p>
-                        <p className="text-sm font-bold text-gray-700">{formData.category}</p>
+                        <p className="text-[9px] sm:text-[10px] font-bold text-gold-600 uppercase tracking-widest mb-1">Class</p>
+                        <p className="text-xs sm:text-sm font-bold text-gray-700">{formData.category}</p>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div className="p-6 bg-gold-50 border border-gold-100 rounded-3xl flex items-center space-x-4">
-                <div className="w-10 h-10 bg-gold-500 rounded-full flex items-center justify-center text-white shadow-lg">
-                  <FaSave size={14} />
+              <div className="p-4 sm:p-6 bg-gold-50 border border-gold-100 rounded-2xl sm:rounded-3xl flex items-center space-x-3 sm:space-x-4">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gold-500 rounded-full flex items-center justify-center text-white shadow-lg shrink-0">
+                  <FaSave size={12} className="sm:size-[14px]" />
                 </div>
                 <div>
-                  <p className="text-xs font-bold text-gold-800 uppercase tracking-widest">Ready for Catalog Entry</p>
-                  <p className="text-[10px] font-medium text-gold-600">Ensure all details meet Olaluxe.ng standards before committing to the archival database.</p>
+                  <p className="text-[10px] sm:text-xs font-bold text-gold-800 uppercase tracking-widest">Ready for Catalog Entry</p>
+                  <p className="text-[9px] sm:text-[10px] font-medium text-gold-600 leading-tight">Ensure all details meet Olaluxe.ng standards before committing to the archival database.</p>
                 </div>
               </div>
             </div>

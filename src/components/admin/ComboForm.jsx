@@ -1,5 +1,5 @@
 import React from 'react';
-import { FaBoxes, FaSave, FaTimes } from 'react-icons/fa';
+import { FaBoxes, FaSave, FaTimes, FaPlus, FaTrash, FaImage, FaCheckCircle } from 'react-icons/fa';
 
 const ComboForm = ({
   formData,
@@ -13,6 +13,8 @@ const ComboForm = ({
   calculatePrice
 }) => {
   const [previews, setPreviews] = React.useState([]);
+  const [newColor, setNewColor] = React.useState('');
+  const [activeColorIdx, setActiveColorIdx] = React.useState(null);
 
   React.useEffect(() => {
     if (!formData.images || formData.images.length === 0) {
@@ -29,6 +31,37 @@ const ComboForm = ({
   const getSelectedProducts = () => {
     return products.filter(product => formData.products.includes(product._id));
   };
+
+  const addColor = () => {
+    if (newColor.trim()) {
+      setFormData({
+        ...formData,
+        colors: [...(formData.colors || []), { name: newColor.trim(), images: [] }]
+      });
+      setNewColor('');
+    }
+  };
+
+  const removeColor = (index) => {
+    const updatedColors = formData.colors.filter((_, i) => i !== index);
+    setFormData({ ...formData, colors: updatedColors });
+  };
+
+  const toggleImageForColor = (colorIdx, imageUrl) => {
+    const updatedColors = [...formData.colors];
+    const color = updatedColors[colorIdx];
+    if (color.images.includes(imageUrl)) {
+      color.images = color.images.filter(img => img !== imageUrl);
+    } else {
+      color.images = [...color.images, imageUrl];
+    }
+    setFormData({ ...formData, colors: updatedColors });
+  };
+
+  const allAvailableImages = [
+    ...(isEditing && (Array.isArray(formData.existingImages) ? formData.existingImages : (formData.image ? [formData.image] : [])) || []),
+    ...previews
+  ];
 
   const inputClasses = "w-full px-4 py-3 bg-white/50 border border-peach-100 rounded-2xl focus:ring-2 focus:ring-peach-200 focus:border-peach-300 outline-none transition-all text-sm font-medium placeholder:text-gray-400";
   const labelClasses = "block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2 ml-1";

@@ -66,18 +66,18 @@ const PasswordForm = ({
         </div>
       </div>
 
-      <div className="flex gap-4 pt-4">
+      <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-4">
         <button
           type="button"
           onClick={onCancel}
-          className="flex-1 px-6 py-3.5 bg-white border border-peach-100 text-gray-600 rounded-2xl text-sm font-bold uppercase tracking-widest hover:bg-beige-50 transition-all active:scale-[0.98]"
+          className="order-2 sm:order-1 flex-1 px-6 py-3 sm:py-3.5 bg-white border border-peach-100 text-gray-600 rounded-xl sm:rounded-2xl text-xs sm:text-sm font-bold uppercase tracking-widest hover:bg-beige-50 transition-all active:scale-[0.98]"
         >
           Cancel
         </button>
         <button
           type="submit"
           disabled={loading}
-          className="flex-[2] bg-gray-900 hover:bg-black disabled:bg-gray-400 text-white px-6 py-3.5 rounded-2xl flex items-center justify-center space-x-3 text-sm font-bold uppercase tracking-widest shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98]"
+          className="order-1 sm:order-2 flex-[2] bg-gray-900 hover:bg-black disabled:bg-gray-400 text-white px-6 py-3 sm:py-3.5 rounded-xl sm:rounded-2xl flex items-center justify-center space-x-3 text-xs sm:text-sm font-bold uppercase tracking-widest shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98]"
         >
           {loading ? (
             <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>

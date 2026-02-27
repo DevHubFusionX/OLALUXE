@@ -40,23 +40,23 @@ const ComboList = ({
         </div>
       </div>
 
-      <div className="p-5 sm:p-6">
+      <div className="p-4 sm:p-6">
         {/* Search and Filter Controls */}
-        <div className="mb-8 flex flex-col md:flex-row gap-4">
+        <div className="mb-6 sm:mb-8 flex flex-col lg:flex-row gap-3 sm:gap-4">
           <div className="flex-1 relative group">
-            <FaSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm group-focus-within:text-gold-600 transition-colors" />
+            <FaSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-xs sm:text-sm group-focus-within:text-gold-600 transition-colors" />
             <input
               type="text"
               placeholder="Search curated sets..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-11 pr-4 py-3 bg-white/50 border border-peach-100 rounded-2xl focus:ring-2 focus:ring-peach-200 outline-none transition-all text-sm font-medium"
+              className="w-full pl-10 sm:pl-11 pr-4 py-2.5 sm:py-3 bg-white/50 border border-peach-100 rounded-xl sm:rounded-2xl focus:ring-2 focus:ring-peach-200 outline-none transition-all text-sm font-medium"
             />
           </div>
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center space-y-3 sm:space-y-0 sm:space-x-4 bg-white/50 border border-peach-50 px-4 sm:px-5 py-3 rounded-2xl">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center space-y-3 sm:space-y-0 sm:space-x-4 bg-white/50 border border-peach-50 px-3 sm:px-5 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl">
             <div className="flex items-center space-x-2 sm:border-r border-peach-50 sm:pr-4 sm:mr-2">
-              <FaFilter className="text-gold-600 text-xs" />
-              <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Filter</span>
+              <FaFilter className="text-gold-600 text-[10px] sm:text-xs" />
+              <span className="text-[9px] sm:text-[10px] font-bold text-gray-400 uppercase tracking-widest">Filter</span>
             </div>
             <label className="flex items-center space-x-3 cursor-pointer group">
               <div className="relative">
@@ -66,16 +66,16 @@ const ComboList = ({
                   onChange={(e) => setFilterPopular(e.target.checked)}
                   className="sr-only"
                 />
-                <div className={`w-5 h-5 border-2 rounded-md transition-all ${filterPopular ? 'bg-gray-900 border-gray-900' : 'bg-white border-peach-100 group-hover:border-peach-200'}`}>
-                  {filterPopular && <div className="absolute inset-0 flex items-center justify-center"><div className="w-2 h-2 bg-peach-200 rounded-full"></div></div>}
+                <div className={`w-4 h-4 sm:w-5 sm:h-5 border-2 rounded-md transition-all ${filterPopular ? 'bg-gray-900 border-gray-900' : 'bg-white border-peach-100 group-hover:border-peach-200'}`}>
+                  {filterPopular && <div className="absolute inset-0 flex items-center justify-center"><div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-peach-200 rounded-full"></div></div>}
                 </div>
               </div>
-              <span className="text-xs font-semibold text-gray-600 group-hover:text-gray-900 transition-colors">Featured Highlights</span>
+              <span className="text-[11px] sm:text-xs font-semibold text-gray-600 group-hover:text-gray-900 transition-colors">Featured Highlights</span>
             </label>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
+        <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-6">
           {filteredCombos.map((combo) => (
             <ComboCard
               key={combo._id}

@@ -27,23 +27,23 @@ const AdminHeader = ({
 
   return (
     <header className="bg-gradient-to-r from-beige-100 via-beige-50 to-beige-100 shadow-xl border-b border-peach-100 sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 py-3 sm:py-4">
         <div className="flex justify-between items-center">
           {/* Logo Section */}
           <div className="flex items-center space-x-2 sm:space-x-4">
             <div className="relative">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-peach-100 to-peach-200 rounded-xl sm:rounded-2xl flex items-center justify-center transform hover:rotate-6 transition-transform duration-500 shadow-md">
-                <span className="text-gray-900 font-serif font-bold text-base sm:text-lg">O</span>
+              <div className="w-9 h-9 sm:w-12 sm:h-12 bg-gradient-to-br from-peach-100 to-peach-200 rounded-xl sm:rounded-2xl flex items-center justify-center transform hover:rotate-6 transition-transform duration-500 shadow-md">
+                <span className="text-gray-900 font-serif font-bold text-sm sm:text-lg">O</span>
               </div>
-              <div className="absolute -top-1 -right-1 w-2.5 h-2.5 sm:w-3 sm:h-3 bg-gold-500 rounded-full shadow-sm animate-pulse"></div>
+              <div className="absolute -top-1 -right-1 w-2 h-2 sm:w-3 sm:h-3 bg-gold-500 rounded-full shadow-sm animate-pulse"></div>
             </div>
-            <div>
-              <h1 className="text-base sm:text-xl font-serif font-bold text-gray-900 tracking-tight">Olaluxe.ng Admin</h1>
-              <p className="text-[8px] sm:text-[10px] font-sans font-bold text-gold-600 uppercase tracking-[0.15em] sm:tracking-[0.2em]">Boutique Management</p>
+            <div className="min-w-0">
+              <h1 className="text-sm sm:text-xl font-serif font-bold text-gray-900 tracking-tight truncate">Olaluxe.ng</h1>
+              <p className="text-[7px] sm:text-[10px] font-sans font-bold text-gold-600 uppercase tracking-[0.1em] sm:tracking-[0.2em]">Management</p>
             </div>
 
             {/* Stats Pill */}
-            <div className="hidden sm:block ml-8">
+            <div className="hidden lg:block ml-8">
               <div className="bg-white/60 backdrop-blur-md border border-peach-100 rounded-full px-4 py-1.5 flex items-center space-x-2 shadow-sm">
                 <div className="w-1.5 h-1.5 bg-gold-500 rounded-full animate-pulse"></div>
                 <span className="text-gray-700 text-xs font-semibold tracking-wide uppercase">
@@ -54,24 +54,24 @@ const AdminHeader = ({
           </div>
 
           {/* Action Buttons */}
-          <div className="flex items-center space-x-3">
+          <div className="flex items-center space-x-2 sm:space-x-3">
             {/* Add Button - icon only on mobile, full on desktop */}
             <button
               onClick={onAddNew}
-              className="group relative overflow-hidden bg-gray-900 hover:bg-black text-white w-10 h-10 sm:w-auto sm:h-auto sm:px-6 sm:py-2.5 rounded-full text-sm font-semibold transform hover:scale-105 transition-all duration-300 shadow-md hover:shadow-peach-200/50 flex items-center justify-center"
+              className="group relative overflow-hidden bg-gray-900 hover:bg-black text-white w-9 h-9 sm:w-auto sm:h-auto sm:px-6 sm:py-2.5 rounded-full text-sm font-semibold transform hover:scale-105 transition-all duration-300 shadow-md hover:shadow-peach-200/50 flex items-center justify-center"
             >
               <div className="relative flex items-center space-x-0 sm:space-x-2">
-                <FaPlus className="text-xs" />
+                <FaPlus className="text-[10px] sm:text-xs" />
                 <span className="hidden sm:inline tracking-wide">Add {activeTab === 'products' ? 'Product' : 'Combo'}</span>
               </div>
             </button>
 
-            {/* Settings Cluster */}
-            <div className="hidden sm:flex items-center">
+            {/* Settings Cluster (Visible on larger screens) */}
+            <div className="hidden md:flex items-center">
               <div className="relative" ref={menuRef}>
                 <button
                   onClick={() => setShowActions(!showActions)}
-                  className="group w-10 h-10 bg-white/60 hover:bg-white/80 backdrop-blur-md border border-peach-100 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110 shadow-sm"
+                  className="group w-9 h-9 sm:w-10 sm:h-10 bg-white/60 hover:bg-white/80 backdrop-blur-md border border-peach-100 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110 shadow-sm"
                 >
                   <FaCog className={`text-gray-600 text-sm transition-transform duration-500 ${showActions ? 'rotate-180' : ''}`} />
                 </button>
@@ -115,12 +115,12 @@ const AdminHeader = ({
               </div>
             </div>
 
-            {/* Mobile Menu Button */}
+            {/* Mobile Menu Button - visible on MD and below */}
             <button
               onClick={onToggleSidebar}
-              className="sm:hidden group w-10 h-10 bg-white/60 hover:bg-white/80 backdrop-blur-md border border-peach-100 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110 shadow-sm"
+              className="lg:hidden group w-9 h-9 sm:w-10 sm:h-10 bg-white/60 hover:bg-white/80 backdrop-blur-md border border-peach-100 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110 shadow-sm"
             >
-              <FaBars className="text-gray-600 text-sm group-hover:rotate-90 transition-transform duration-300" />
+              <FaBars className="text-gray-600 text-xs sm:text-sm group-hover:rotate-90 transition-transform duration-300" />
             </button>
           </div>
         </div>

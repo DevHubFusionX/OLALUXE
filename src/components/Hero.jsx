@@ -10,10 +10,7 @@ const Hero = () => {
         <div className="absolute inset-0 bg-black/50"></div>
         <div className="relative z-10 container mx-auto px-6 h-full flex items-center">
           <div className="text-center text-white">
-            <div className="inline-flex items-center space-x-2 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full mb-6 border border-white/30">
-              <FaShoppingBag className="text-white" size={14} />
-              <span className="text-xs font-bold tracking-widest uppercase">Premium Jewelry & Accessories</span>
-            </div>
+
 
             <h1 className="text-4xl font-serif font-bold mb-6 leading-tight">
               Luxury <br />
@@ -21,7 +18,7 @@ const Hero = () => {
             </h1>
 
             <p className="text-lg mb-10 leading-relaxed max-w-lg mx-auto opacity-90">
-              Premium jewelry, bags, and accessories delivered nationwide. Quality guaranteed, prices that make sense.
+              Premium jewelry, bags, and accessories curated for your elegance. Quality guaranteed, prices that make sense.
             </p>
 
             <div className="flex flex-col gap-4">
@@ -43,10 +40,7 @@ const Hero = () => {
           <div className="max-w-7xl mx-auto">
             <div className="grid lg:grid-cols-2 gap-16 items-center">
               <div className="text-center lg:text-left">
-                <div className="inline-flex items-center space-x-2 bg-peach-50 px-4 py-2 rounded-full mb-6 border border-peach-100">
-                  <FaShoppingBag className="text-gold-500" size={14} />
-                  <span className="text-xs font-bold tracking-widest text-gray-600 uppercase">Premium Jewelry & Accessories</span>
-                </div>
+
 
                 <h1 className="text-5xl lg:text-7xl font-serif font-bold text-gray-900 mb-6 leading-tight">
                   Luxury <br />
@@ -54,7 +48,7 @@ const Hero = () => {
                 </h1>
 
                 <p className="text-lg text-gray-600 mb-10 leading-relaxed max-w-lg">
-                  Premium jewelry, bags, and accessories delivered nationwide. Quality guaranteed, prices that make sense.
+                  Premium jewelry, bags, and accessories curated for your elegance. Quality guaranteed, prices that make sense.
                 </p>
 
                 <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">

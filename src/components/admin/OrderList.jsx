@@ -41,7 +41,46 @@ const OrderList = ({ orders, onPreview, loading }) => {
 
     return (
         <div className="bg-white rounded-2xl shadow-xl border border-peach-100 overflow-hidden">
-            <div className="overflow-x-auto">
+            {/* Mobile Card View */}
+            <div className="block sm:hidden divide-y divide-peach-50">
+                {orders.map((order) => {
+                    const StatusIcon = statusIcons[order.status] || FaClock;
+                    return (
+                        <div key={order._id} className="p-4 bg-white hover:bg-beige-50/30 transition-colors">
+                            <div className="flex justify-between items-start mb-3">
+                                <div>
+                                    <span className="text-sm font-serif font-bold text-gray-900">{order.orderNumber}</span>
+                                    <span className="text-[10px] text-gray-400 block mt-0.5">
+                                        {new Date(order.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
+                                    </span>
+                                </div>
+                                <div className={`inline-flex items-center space-x-1.5 px-2.5 py-0.5 rounded-full border ${statusColors[order.status] || 'bg-gray-100'}`}>
+                                    <StatusIcon className={`text-[9px] ${order.status === 'Processing' ? 'animate-spin' : ''}`} />
+                                    <span className="text-[9px] font-sans font-bold uppercase tracking-wider">{order.status}</span>
+                                </div>
+                            </div>
+                            <div className="flex justify-between items-end">
+                                <div>
+                                    <p className="text-xs font-sans font-bold text-gray-900">{order.customer.name}</p>
+                                    <p className="text-[10px] text-gray-500 mt-0.5">{order.items.length} {order.items.length === 1 ? 'item' : 'items'}</p>
+                                </div>
+                                <div className="flex flex-col items-end gap-2">
+                                    <span className="text-sm font-serif font-bold text-gold-700">₦{(order.totalAmount || 0).toLocaleString()}</span>
+                                    <button
+                                        onClick={() => onPreview(order)}
+                                        className="px-4 py-1.5 bg-beige-50 border border-peach-100 rounded-lg text-gray-700 text-[10px] font-bold"
+                                    >
+                                        View Details
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    );
+                })}
+            </div>
+
+            {/* Desktop Table View */}
+            <div className="hidden sm:block">
                 <table className="w-full text-left border-collapse">
                     <thead>
                         <tr className="bg-gray-50 border-b border-peach-100">

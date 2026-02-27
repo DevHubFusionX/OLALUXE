@@ -105,8 +105,8 @@ const Contact = () => {
                 At Olaluxe, we prioritize your satisfaction. Our concierge team guarantees a thoughtful response to all inquiries within 1 hour.
               </p>
               <div className="bg-white/5 rounded-2xl p-5 border border-white/10 relative z-10">
-                <p className="text-xs font-bold tracking-[0.2em] uppercase text-gold-500">Fast Delivery Nationwide</p>
-                <p className="text-xs text-gray-500 mt-1 uppercase tracking-widest">Nigeria & Ghana Shipping</p>
+                <p className="text-xs font-bold tracking-[0.2em] uppercase text-gold-500">Concierge Support Available</p>
+                <p className="text-xs text-gray-500 mt-1 uppercase tracking-widest">Nigeria based • Global Reach</p>
               </div>
             </div>
           </div>

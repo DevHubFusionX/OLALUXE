@@ -6,25 +6,14 @@ import { FaShoppingBag, FaTruck, FaCreditCard, FaCheck, FaArrowLeft, FaTrash, Fa
 import Footer from './Footer';
 
 const STEPS = [
-    { id: 1, label: 'Review', icon: FaShoppingBag },
-    { id: 2, label: 'Delivery', icon: FaTruck },
-    { id: 3, label: 'Payment', icon: FaCreditCard },
+    { id: 1, label: 'Review Cart', icon: FaShoppingBag },
+    { id: 2, label: 'Booking Details', icon: FaTruck },
 ];
 
 const CheckoutPage = () => {
     const { cartItems, cartTotal, clearCart, removeFromCart, updateQuantity } = useCart();
     const navigate = useNavigate();
     const [currentStep, setCurrentStep] = useState(1);
-    const [receiptFile, setReceiptFile] = useState(null);
-    const [receiptPreview, setReceiptPreview] = useState(null);
-
-    const handleReceiptChange = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            setReceiptFile(file);
-            setReceiptPreview(URL.createObjectURL(file));
-        }
-    };
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [orderSuccess, setOrderSuccess] = useState(false);
     const [orderData, setOrderData] = useState(null);
@@ -35,9 +24,7 @@ const CheckoutPage = () => {
         phone: '',
         address: '',
         city: '',
-        state: '',
-        deliveryMethod: 'Standard',
-        paymentMethod: 'Bank Transfer'
+        state: ''
     });
 
     const handleChange = (e) => {
@@ -46,7 +33,7 @@ const CheckoutPage = () => {
     };
 
     const nextStep = () => {
-        if (currentStep < 3) {
+        if (currentStep < 2) {
             setCurrentStep(prev => prev + 1);
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
@@ -60,7 +47,7 @@ const CheckoutPage = () => {
     };
 
     const isDeliveryValid = () => {
-        return formData.name && formData.phone && formData.email && formData.address && formData.city && formData.state;
+        return formData.name && formData.phone && formData.address && formData.city && formData.state;
     };
 
     const handleSubmit = async () => {
@@ -79,9 +66,9 @@ const CheckoutPage = () => {
             };
 
             const itemsData = cartItems.map(item => ({
-                product: item._id, // item ID
-                itemType: item.itemType || 'Product', // 'Product' or 'Combo'
-                name: item.name, // Snapshot of the name
+                product: item._id,
+                itemType: item.itemType || 'Product',
+                name: item.name,
                 quantity: item.quantity,
                 price: parseFloat(item.price.replace(/[^\d.]/g, '')) || 0,
                 color: item.selectedColor,
@@ -91,33 +78,29 @@ const CheckoutPage = () => {
             formDataPayload.append('customer', JSON.stringify(customerData));
             formDataPayload.append('items', JSON.stringify(itemsData));
             formDataPayload.append('totalAmount', cartTotal);
-            formDataPayload.append('paymentMethod', formData.paymentMethod);
-            formDataPayload.append('deliveryMethod', formData.deliveryMethod);
-
-            if (receiptFile) {
-                formDataPayload.append('receipt', receiptFile);
-            }
+            formDataPayload.append('paymentMethod', 'WhatsApp Booking');
+            formDataPayload.append('deliveryMethod', 'WhatsApp Coordination');
 
             const result = await apiRequest(API_ENDPOINTS.orders, {
                 method: 'POST',
-                // Don't set Content-Type header when sending FormData
                 body: formDataPayload
             });
 
-            // Prepare WhatsApp Message
+            // Prepare Professional WhatsApp Message
             const orderNum = result.orderNumber;
             const itemsSummary = cartItems.map(item =>
-                `• ${item.name} (${item.quantity}x) - ${item.price}`
-            ).join('\n');
+                `• *${item.name}* \n   Qty: ${item.quantity} | Color: ${item.selectedColor || 'Default'} | Price: ${item.price}`
+            ).join('\n\n');
 
-            const waMessage = `*New Order: #${orderNum}*\n\n` +
-                `*Customer:* ${formData.name}\n` +
-                `*Phone:* ${formData.phone}\n` +
-                `*Delivery:* ${formData.address}, ${formData.city}\n\n` +
-                `*Items:*\n${itemsSummary}\n\n` +
-                `*Total:* ₦${cartTotal.toLocaleString()}\n` +
-                `*Payment:* ${formData.paymentMethod}\n\n` +
-                `_I have placed my order and uploaded the receipt. Please confirm._`;
+            const waMessage = `✨ *NEW BOOKING REQUEST: #${orderNum}* ✨\n\n` +
+                `👤 *Customer:* ${formData.name}\n` +
+                `📞 *Phone:* ${formData.phone}\n` +
+                `📍 *Address:* ${formData.address}\n` +
+                `🏙️ *City/State:* ${formData.city}, ${formData.state}\n\n` +
+                `🛍️ *Order Items:*\n${itemsSummary}\n\n` +
+                `💰 *Total Amount:* ₦${cartTotal.toLocaleString()}\n\n` +
+                `--- \n` +
+                `_Hello Olaluxe, I would like to confirm my booking. Please provide payment and delivery details._`;
 
             const encodedMsg = encodeURIComponent(waMessage);
             const waUrl = `https://wa.me/2349120491702?text=${encodedMsg}`;
@@ -130,11 +113,11 @@ const CheckoutPage = () => {
             // Redirect to WhatsApp after a short delay
             setTimeout(() => {
                 window.open(waUrl, '_blank');
-            }, 2000);
+            }, 2500);
 
         } catch (error) {
             console.error('Checkout error:', error);
-            alert('There was an error processing your order. Please try again.');
+            alert('There was an error processing your booking. Please try again.');
         } finally {
             setIsSubmitting(false);
         }
@@ -150,20 +133,20 @@ const CheckoutPage = () => {
                         <div className="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-6">
                             <FaCheck size={32} />
                         </div>
-                        <h2 className="text-3xl sm:text-4xl font-serif font-bold text-gray-900 mb-4">Order Received!</h2>
+                        <h2 className="text-3xl sm:text-4xl font-serif font-bold text-gray-900 mb-4">Booking Initialized!</h2>
                         <p className="text-gray-600 mb-2">Thank you for choosing Olaluxe, <span className="font-bold text-gray-900">{formData.name}</span>.</p>
                         <p className="text-gray-500 font-light mb-8">
-                            Your order number is <span className="font-serif font-bold text-gold-600 tracking-wider">#{orderData?.orderNumber}</span>.
-                            We will contact you shortly via WhatsApp/Email to confirm delivery.
+                            Your booking reference is <span className="font-serif font-bold text-gold-600 tracking-wider">#{orderData?.orderNumber}</span>.
+                            We are redirecting you to WhatsApp to finalize your order.
                         </p>
 
                         <div className="bg-beige-50 rounded-2xl p-6 mb-8 text-left border border-peach-100">
-                            <h3 className="font-serif font-bold text-gray-900 mb-4 text-sm">Next Steps:</h3>
+                            <h3 className="font-serif font-bold text-gray-900 mb-4 text-sm">What happens next:</h3>
                             <ul className="space-y-3 text-sm text-gray-600">
                                 {[
-                                    'Check your WhatsApp/Email for an order confirmation.',
-                                    'For Bank Transfers, payment details will be provided.',
-                                    'Your items will be prepared once payment is verified.'
+                                    'Confirm your order details on WhatsApp.',
+                                    'Our team will provide payment details & shipping costs.',
+                                    'Your items will be dispatched once payment is confirmed.'
                                 ].map((text, i) => (
                                     <li key={i} className="flex items-start space-x-3">
                                         <span className="w-6 h-6 bg-white rounded-full flex items-center justify-center text-[10px] font-bold text-gold-600 shadow-sm flex-shrink-0">{i + 1}</span>
@@ -173,12 +156,22 @@ const CheckoutPage = () => {
                             </ul>
                         </div>
 
-                        <button
-                            onClick={() => navigate('/products')}
-                            className="w-full bg-gray-900 hover:bg-black text-white py-4 rounded-full font-bold shadow-xl transition-all"
-                        >
-                            Back to Catalog
-                        </button>
+                        <div className="space-y-4">
+                            <a
+                                href={`https://wa.me/2349120491702?text=${encodeURIComponent(`Hi, following up on my booking #${orderData?.orderNumber}`)}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="block w-full bg-[#25D366] hover:bg-[#20bd5a] text-white py-4 rounded-full font-bold shadow-xl transition-all"
+                            >
+                                Open WhatsApp Now
+                            </a>
+                            <button
+                                onClick={() => navigate('/products')}
+                                className="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 py-4 rounded-full font-bold transition-all"
+                            >
+                                Back to Catalog
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -290,12 +283,8 @@ const CheckoutPage = () => {
                                                 <span>Subtotal ({cartItems.reduce((t, i) => t + i.quantity, 0)} items)</span>
                                                 <span>₦{cartTotal.toLocaleString()}</span>
                                             </div>
-                                            <div className="flex justify-between text-gray-500 text-sm">
-                                                <span>Shipping</span>
-                                                <span className="text-green-600 font-medium">Calculated next</span>
-                                            </div>
                                             <div className="flex justify-between items-center pt-3 border-t border-peach-100">
-                                                <span className="text-lg font-serif font-bold text-gray-900">Total</span>
+                                                <span className="text-lg font-serif font-bold text-gray-900">Total Est.</span>
                                                 <span className="text-2xl font-serif font-bold text-gray-900">₦{cartTotal.toLocaleString()}</span>
                                             </div>
                                         </div>
@@ -304,7 +293,7 @@ const CheckoutPage = () => {
                                             onClick={nextStep}
                                             className="w-full mt-6 bg-gray-900 hover:bg-black text-white py-4 rounded-full font-bold shadow-xl transition-all active:scale-[0.98]"
                                         >
-                                            Continue to Delivery
+                                            Continue to Booking
                                         </button>
                                     </>
                                 )}
@@ -312,11 +301,11 @@ const CheckoutPage = () => {
                         </div>
                     )}
 
-                    {/* ═══ Step 2: Delivery Information ═══ */}
+                    {/* ═══ Step 2: Booking Details ═══ */}
                     {currentStep === 2 && (
                         <div className="animate-fade-in">
                             <div className="bg-white rounded-3xl p-5 sm:p-8 shadow-sm border border-peach-50">
-                                <h2 className="text-xl sm:text-2xl font-serif font-bold text-gray-900 mb-6">Delivery Information</h2>
+                                <h2 className="text-xl sm:text-2xl font-serif font-bold text-gray-900 mb-6">Booking Details</h2>
 
                                 <div className="space-y-4">
                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -339,16 +328,16 @@ const CheckoutPage = () => {
                                     </div>
 
                                     <div className="space-y-1.5">
-                                        <label className="text-[11px] font-bold text-gray-400 uppercase tracking-widest ml-1">Email Address</label>
+                                        <label className="text-[11px] font-bold text-gray-400 uppercase tracking-widest ml-1">Email (Optional)</label>
                                         <input
-                                            required type="email" name="email" value={formData.email} onChange={handleChange}
+                                            type="email" name="email" value={formData.email} onChange={handleChange}
                                             placeholder="jane@example.com"
                                             className="w-full px-4 py-3.5 bg-beige-50 border border-peach-100 rounded-xl focus:ring-2 focus:ring-peach-200 focus:border-transparent outline-none transition-all text-sm"
                                         />
                                     </div>
 
                                     <div className="space-y-1.5">
-                                        <label className="text-[11px] font-bold text-gray-400 uppercase tracking-widest ml-1">Shipping Address</label>
+                                        <label className="text-[11px] font-bold text-gray-400 uppercase tracking-widest ml-1">Delivery Address</label>
                                         <textarea
                                             required name="address" value={formData.address} onChange={handleChange}
                                             rows="2" placeholder="House Number, Street Name..."
@@ -370,138 +359,15 @@ const CheckoutPage = () => {
                                             <input
                                                 required name="state" value={formData.state} onChange={handleChange}
                                                 placeholder="Lagos"
-                                                className="w-full px-4 py-3.5 bg-beige-50 border border-peach-100 rounded-xl focus:ring-2 focus:ring-peach-200 focus:border-transparent outline-none transition-all text-sm"
+                                                className="w-full px-4 py-3.5 bg-beige-50 border border-peach-100 rounded-xl focus:ring-2 focus:ring-brand-200 focus:border-transparent outline-none transition-all text-sm"
                                             />
                                         </div>
                                     </div>
                                 </div>
 
-                                {/* Navigation */}
-                                <div className="flex gap-3 mt-8">
-                                    <button
-                                        onClick={prevStep}
-                                        className="flex items-center justify-center px-6 py-3.5 bg-white border border-peach-100 text-gray-700 rounded-full font-medium hover:bg-peach-50 transition-all active:scale-[0.98]"
-                                    >
-                                        <FaArrowLeft size={12} className="mr-2" /> Back
-                                    </button>
-                                    <button
-                                        onClick={nextStep}
-                                        disabled={!isDeliveryValid()}
-                                        className="flex-1 bg-gray-900 hover:bg-black text-white py-3.5 rounded-full font-bold shadow-xl transition-all disabled:opacity-40 disabled:cursor-not-allowed active:scale-[0.98]"
-                                    >
-                                        Continue to Payment
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    )}
-
-                    {/* ═══ Step 3: Payment & Confirm ═══ */}
-                    {currentStep === 3 && (
-                        <div className="animate-fade-in">
-                            <div className="bg-white rounded-3xl p-5 sm:p-8 shadow-sm border border-peach-50">
-                                <h2 className="text-xl sm:text-2xl font-serif font-bold text-gray-900 mb-6">Payment & Delivery</h2>
-
-                                <div className="space-y-6">
-                                    {/* Delivery Method */}
-                                    <div>
-                                        <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest ml-1 mb-3">Delivery Method</p>
-                                        <div className="grid grid-cols-2 gap-3">
-                                            {['Standard', 'Express'].map(method => (
-                                                <label key={method} className={`flex flex-col items-center p-4 rounded-2xl border-2 cursor-pointer transition-all text-center ${formData.deliveryMethod === method ? 'border-gold-500 bg-peach-50' : 'border-gray-100 hover:border-peach-100'
-                                                    }`}>
-                                                    <input type="radio" name="deliveryMethod" value={method} checked={formData.deliveryMethod === method} onChange={handleChange} className="hidden" />
-                                                    <FaTruck className={`mb-2 ${formData.deliveryMethod === method ? 'text-gold-600' : 'text-gray-400'}`} size={18} />
-                                                    <span className={`text-sm font-bold ${formData.deliveryMethod === method ? 'text-gray-900' : 'text-gray-500'}`}>{method}</span>
-                                                    <span className="text-[10px] text-gray-400 mt-0.5">{method === 'Standard' ? '3-5 days' : '1-2 days'}</span>
-                                                </label>
-                                            ))}
-                                        </div>
-                                    </div>
-
-                                    {/* Payment Method */}
-                                    <div>
-                                        <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest ml-1 mb-3">Payment Method</p>
-                                        <div className="grid grid-cols-2 gap-3 mb-6">
-                                            {['Bank Transfer', 'On Delivery'].map(method => (
-                                                <label key={method} className={`flex flex-col items-center p-4 rounded-2xl border-2 cursor-pointer transition-all text-center ${formData.paymentMethod === method ? 'border-gold-500 bg-peach-50' : 'border-gray-100 hover:border-peach-100'
-                                                    }`}>
-                                                    <input type="radio" name="paymentMethod" value={method} checked={formData.paymentMethod === method} onChange={handleChange} className="hidden" />
-                                                    <FaCreditCard className={`mb-2 ${formData.paymentMethod === method ? 'text-gold-600' : 'text-gray-400'}`} size={18} />
-                                                    <span className={`text-sm font-bold ${formData.paymentMethod === method ? 'text-gray-900' : 'text-gray-500'}`}>{method}</span>
-                                                </label>
-                                            ))}
-                                        </div>
-
-                                        {/* Bank Transfer Details & Receipt Upload */}
-                                        {formData.paymentMethod === 'Bank Transfer' && (
-                                            <div className="bg-peach-50/50 rounded-2xl p-5 border border-peach-100 animate-fade-in space-y-4">
-                                                <div className="space-y-1">
-                                                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Bank Details</p>
-                                                    <div className="bg-white rounded-xl p-4 shadow-sm border border-peach-50">
-                                                        <p className="text-sm font-bold text-gray-900">1234567890</p>
-                                                        <p className="text-xs text-gray-600">Zenith Bank • Olaluxe Boutique</p>
-                                                    </div>
-                                                </div>
-
-                                                <div className="space-y-2">
-                                                    <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Upload Transfer Proof</p>
-                                                    <div className="relative group">
-                                                        <input
-                                                            type="file"
-                                                            accept="image/*"
-                                                            onChange={handleReceiptChange}
-                                                            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-                                                            required
-                                                        />
-                                                        <div className="w-full px-4 py-8 border-2 border-dashed border-peach-200 rounded-xl flex flex-col items-center justify-center bg-white group-hover:bg-peach-50 group-hover:border-peach-300 transition-all">
-                                                            {receiptPreview ? (
-                                                                <div className="relative w-full aspect-video rounded-lg overflow-hidden border border-peach-100">
-                                                                    <img src={receiptPreview} alt="Receipt Preview" className="w-full h-full object-cover" />
-                                                                    <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                                                                        <span className="text-white text-[10px] font-bold uppercase tracking-widest">Change Image</span>
-                                                                    </div>
-                                                                </div>
-                                                            ) : (
-                                                                <>
-                                                                    <div className="w-10 h-10 bg-beige-50 rounded-full flex items-center justify-center mb-2">
-                                                                        <FaCreditCard className="text-gold-600" size={16} />
-                                                                    </div>
-                                                                    <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest text-center">Click or Drag Receipt Photo</p>
-                                                                </>
-                                                            )}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        )}
-                                    </div>
-
-                                    {/* Order Review Summary */}
-                                    <div className="bg-beige-50 rounded-2xl p-5 border border-peach-100">
-                                        <h3 className="text-sm font-serif font-bold text-gray-900 mb-4">Order Summary</h3>
-                                        <div className="space-y-2.5 mb-4">
-                                            {cartItems.map((item) => (
-                                                <div key={`${item._id}-${item.selectedColor}`} className="flex justify-between items-center text-sm">
-                                                    <span className="text-gray-600 truncate mr-4">{item.name} <span className="text-gray-400">×{item.quantity}</span></span>
-                                                    <span className="font-bold text-gray-900 flex-shrink-0">{item.price}</span>
-                                                </div>
-                                            ))}
-                                        </div>
-                                        <div className="border-t border-peach-100 pt-3 space-y-2">
-                                            <div className="flex justify-between text-sm text-gray-500">
-                                                <span>Shipping to {formData.city}, {formData.state}</span>
-                                                <span className="text-green-600 font-medium">TBD</span>
-                                            </div>
-                                            <div className="flex justify-between items-center pt-2 border-t border-peach-100">
-                                                <span className="font-serif font-bold text-gray-900">Total</span>
-                                                <span className="text-xl font-serif font-bold text-gray-900">₦{cartTotal.toLocaleString()}</span>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <p className="text-xs text-gray-400 italic text-center leading-relaxed">
-                                        "We'll reach out to confirm your preferences and finalize shipping cost before you pay."
+                                <div className="mt-8 p-4 bg-peach-50/50 rounded-2xl border border-peach-100">
+                                    <p className="text-xs text-gray-600 text-center italic">
+                                        "By clicking 'Complete Booking', your request will be sent to our system and you'll be redirected to WhatsApp to finish."
                                     </p>
                                 </div>
 
@@ -515,16 +381,14 @@ const CheckoutPage = () => {
                                     </button>
                                     <button
                                         onClick={handleSubmit}
-                                        disabled={isSubmitting || cartItems.length === 0 || (formData.paymentMethod === 'Bank Transfer' && !receiptFile)}
-                                        className="flex-1 bg-gray-900 hover:bg-black text-white py-3.5 rounded-full font-bold shadow-xl transition-all disabled:opacity-40 disabled:cursor-not-allowed active:scale-[0.98]"
+                                        disabled={isSubmitting || !isDeliveryValid()}
+                                        className="flex-1 bg-[#25D366] hover:bg-[#20bd5a] text-white py-3.5 rounded-full font-bold shadow-xl transition-all disabled:opacity-40 disabled:cursor-not-allowed active:scale-[0.98] flex items-center justify-center gap-2"
                                     >
-                                        {isSubmitting ? (
-                                            <span className="flex items-center justify-center">
-                                                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
-                                                Processing...
-                                            </span>
-                                        ) : (
-                                            'Place Order'
+                                        {isSubmitting ? 'Processing...' : (
+                                            <>
+                                                <FaWhatsapp size={18} />
+                                                Complete Booking
+                                            </>
                                         )}
                                     </button>
                                 </div>

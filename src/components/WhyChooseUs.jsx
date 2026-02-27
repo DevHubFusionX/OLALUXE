@@ -11,7 +11,7 @@ const WhyChooseUs = () => {
     {
       icon: FaShippingFast,
       title: 'Fast Delivery',
-      description: 'Quick nationwide delivery with tracking. Most orders ship within 24 hours.'
+      description: 'Personalized assistance for all your orders. Most requests processed within 24 hours.'
     },
     {
       icon: FaTags,
