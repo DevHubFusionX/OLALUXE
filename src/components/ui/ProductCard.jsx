@@ -66,6 +66,12 @@ const ProductCard = React.memo(({ product, showActions = false, onEdit, onDelete
           <div className="bg-white/80 backdrop-blur-md text-gray-700 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest shadow-md">
             {product.category}
           </div>
+          {product.colors && product.colors.length > 0 && (
+            <div className="bg-gold-500/90 backdrop-blur-md text-white px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest shadow-md flex items-center gap-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span>
+              {product.colors.length} Colors
+            </div>
+          )}
         </div>
 
         {images.length > 1 && (

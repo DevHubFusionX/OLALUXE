@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useCart } from '../context/CartContext';
 import { useNavigate } from 'react-router-dom';
 import { API_ENDPOINTS, apiRequest } from '../utils/api';
-import { FaShoppingBag, FaTruck, FaCreditCard, FaCheck, FaArrowLeft, FaTrash, FaMinus, FaPlus } from 'react-icons/fa';
+import { FaShoppingBag, FaTruck, FaCreditCard, FaCheck, FaArrowLeft, FaTrash, FaMinus, FaPlus, FaWhatsapp } from 'react-icons/fa';
 import Footer from './Footer';
 
 const STEPS = [

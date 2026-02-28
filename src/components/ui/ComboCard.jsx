@@ -41,8 +41,15 @@ const ComboCard = ({ combo, showActions = false, onEdit, onDelete }) => {
           </div>
         )}
 
-        <div className="absolute top-3 right-3 bg-gold-500 text-white px-3 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase shadow-sm">
-          Save {combo.savings}
+        <div className="absolute top-3 right-3 flex flex-col items-end gap-2">
+          <div className="bg-gold-500 text-white px-3 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase shadow-sm">
+            Save {combo.savings}
+          </div>
+          {combo.colors && combo.colors.length > 0 && (
+            <div className="bg-white/90 backdrop-blur-sm text-gray-900 px-2 py-1 rounded-full text-[9px] font-bold tracking-widest uppercase shadow-sm border border-peach-100 italic">
+              {combo.colors.length} Variations
+            </div>
+          )}
         </div>
       </div>
 
