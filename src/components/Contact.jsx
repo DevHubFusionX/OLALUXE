@@ -60,7 +60,7 @@ const Contact = () => {
             </div>
 
             <div className="grid grid-cols-2 gap-6">
-              <a href="https://wa.me/2349120491702" className="bg-[#25D366] hover:bg-[#20bd5a] text-white p-8 rounded-3xl text-center transition-all shadow-lg hover:-translate-y-1">
+              <a href="https://wa.me/2349134136404" className="bg-[#25D366] hover:bg-[#20bd5a] text-white p-8 rounded-3xl text-center transition-all shadow-lg hover:-translate-y-1">
                 <FaWhatsapp className="mx-auto mb-4" size={32} />
                 <div className="font-bold uppercase tracking-widest text-xs mb-1">WhatsApp</div>
               </a>
