@@ -37,7 +37,7 @@ const Footer = () => {
               </div>
               <div className="flex items-center space-x-3 text-gray-400">
                 <FaWhatsapp className="text-peach-100" size={14} />
-                <span className="text-sm">+234 912 049 1702</span>
+                <span className="text-sm">+234 913 413 6404</span>
               </div>
               <div className="flex items-center space-x-3 text-gray-400">
                 <FaMapMarkerAlt className="text-peach-100" size={14} />
@@ -49,7 +49,7 @@ const Footer = () => {
           <div>
             <h4 className="text-xs font-bold uppercase tracking-[0.2em] mb-4 text-gold-500">Follow Us</h4>
             <div className="flex space-x-3 mb-4">
-              <a href="https://wa.me/2349120491702" className="bg-beige-50/10 hover:bg-beige-50/20 p-3 rounded-full transition-colors">
+              <a href="https://wa.me/2349134136404" className="bg-beige-50/10 hover:bg-beige-50/20 p-3 rounded-full transition-colors">
                 <FaWhatsapp size={18} />
               </a>
               <a href="https://instagram.com/olaluxe_brand" className="bg-beige-50/10 hover:bg-beige-50/20 p-3 rounded-full transition-colors">
