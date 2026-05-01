@@ -64,7 +64,7 @@ const Contact = () => {
                 <FaWhatsapp className="mx-auto mb-4" size={32} />
                 <div className="font-bold uppercase tracking-widest text-xs mb-1">WhatsApp</div>
               </a>
-              <a href="tel:+2349120491702" className="bg-gray-900 hover:bg-black text-white p-8 rounded-3xl text-center transition-all shadow-lg hover:-translate-y-1">
+              <a href="tel:+234 913 413 6404" className="bg-gray-900 hover:bg-black text-white p-8 rounded-3xl text-center transition-all shadow-lg hover:-translate-y-1">
                 <FaPhone className="mx-auto mb-4" size={32} />
                 <div className="font-bold uppercase tracking-widest text-xs mb-1">Call Concierge</div>
               </a>

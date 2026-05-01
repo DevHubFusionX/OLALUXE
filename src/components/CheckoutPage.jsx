@@ -103,7 +103,7 @@ const CheckoutPage = () => {
                 `_Hello Olaluxe, I would like to confirm my booking. Please provide payment and delivery details._`;
 
             const encodedMsg = encodeURIComponent(waMessage);
-            const waUrl = `https://wa.me/2349120491702?text=${encodedMsg}`;
+            const waUrl = `https://wa.me/2349134136404?text=${encodedMsg}`;
 
             setOrderData(result);
             setOrderSuccess(true);
@@ -158,7 +158,7 @@ const CheckoutPage = () => {
 
                         <div className="space-y-4">
                             <a
-                                href={`https://wa.me/2349120491702?text=${encodeURIComponent(`Hi, following up on my booking #${orderData?.orderNumber}`)}`}
+                                href={`https://wa.me/2349134136404?text=${encodeURIComponent(`Hi, following up on my booking #${orderData?.orderNumber}`)}`}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="block w-full bg-[#25D366] hover:bg-[#20bd5a] text-white py-4 rounded-full font-bold shadow-xl transition-all"
