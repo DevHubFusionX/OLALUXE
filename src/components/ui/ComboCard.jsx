@@ -120,7 +120,7 @@ const ComboCard = ({ combo, showActions = false, onEdit, onDelete }) => {
                 size="sm"
                 onClick={(e) => {
                   e.stopPropagation();
-                  window.open(`https://wa.me/2349120491702?text=Hi, I'm interested in the ${combo.name} combo for ${combo.comboPrice}`, '_blank');
+                  window.open(`https://wa.me/2349134136404?text=Hi, I'm interested in the ${combo.name} combo for ${combo.comboPrice}`, '_blank');
                 }}
               >
                 <FaWhatsapp size={16} />

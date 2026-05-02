@@ -38,7 +38,7 @@ const Header = () => {
             {/* Action buttons with creative styling */}
             <div className="flex items-center space-x-3">
               <div className="hidden sm:flex items-center space-x-2">
-                <a href="https://wa.me/2349120491702" className="p-2 text-gray-600 hover:text-green-600 transition-colors">
+                <a href="https://wa.me/2349134136404" className="p-2 text-gray-600 hover:text-green-600 transition-colors">
                   <FaWhatsapp size={18} />
                 </a>
                 <a href="https://x.com/moderate_ustaz" className="p-2 text-gray-600 hover:text-black transition-colors">
@@ -90,7 +90,7 @@ const Header = () => {
               </Link>
 
               <div className="flex justify-center space-x-6 pt-6 mt-6 border-t border-peach-50">
-                <a href="https://wa.me/2349120491702" className="text-gray-400 hover:text-green-500">
+                <a href="https://wa.me/2349134136404" className="text-gray-400 hover:text-green-500">
                   <FaWhatsapp size={24} />
                 </a>
                 <a href="https://x.com/moderate_ustaz" className="text-gray-400 hover:text-black">
@@ -103,7 +103,7 @@ const Header = () => {
       </header>
 
       {/* Floating WhatsApp Button */}
-      <a href="https://wa.me/2349120491702" className="fixed bottom-6 right-6 bg-peach-200 text-white p-4 rounded-full shadow-lg hover:shadow-xl transition-all z-50 hover:bg-peach-100">
+      <a href="https://wa.me/2349134136404" className="fixed bottom-6 right-6 bg-peach-200 text-white p-4 rounded-full shadow-lg hover:shadow-xl transition-all z-50 hover:bg-peach-100">
         <FaWhatsapp size={24} />
       </a>
     </>

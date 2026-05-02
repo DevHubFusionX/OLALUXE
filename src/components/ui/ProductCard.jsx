@@ -126,7 +126,7 @@ const ProductCard = React.memo(({ product, showActions = false, onEdit, onDelete
                 className="w-10 h-10 bg-beige-50 hover:bg-white text-green-600 rounded-xl transition-all border border-peach-100 flex items-center justify-center shadow-sm active:scale-95"
                 onClick={(e) => {
                   e.stopPropagation();
-                  window.open(`https://wa.me/2349120491702?text=Hi, I'm interested in ${product.name} for ${product.price}`, '_blank');
+                  window.open(`https://wa.me/2349134136404?text=Hi, I'm interested in ${product.name} for ${product.price}`, '_blank');
                 }}
               >
                 <FaWhatsapp size={16} />

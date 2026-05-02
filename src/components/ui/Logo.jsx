@@ -38,7 +38,7 @@ const Logo = ({ size = 'md', showDetails = false }) => {
           <a href="https://instagram.com/olaluxe_brand" className="text-gray-400 hover:text-peach-200 transition-colors">
             <FaInstagram size={14} />
           </a>
-          <a href="https://wa.me/2349120491702" className="text-gray-400 hover:text-green-500 transition-colors">
+          <a href="https://wa.me/2349134136404" className="text-gray-400 hover:text-green-500 transition-colors">
             <FaWhatsapp size={14} />
           </a>
         </div>

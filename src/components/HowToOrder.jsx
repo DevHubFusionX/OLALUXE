@@ -56,7 +56,7 @@ const HowToOrder = () => {
             <div className="absolute top-0 right-0 w-32 h-32 bg-peach-50/50 rounded-full -mr-16 -mt-16"></div>
             <h3 className="text-3xl font-serif font-bold text-gray-900 mb-4 relative z-10">Seeking Guidance?</h3>
             <p className="text-gray-600 mb-8 max-w-md mx-auto relative z-10">Our concierge team is available to assist you with selection, sizing, and styling advice.</p>
-            <a href="https://wa.me/2349120491702" className="inline-flex items-center space-x-3 bg-gray-900 hover:bg-black text-white px-10 py-4 rounded-full font-semibold transition-all shadow-xl group relative z-10">
+            <a href="https://wa.me/2349134136404" className="inline-flex items-center space-x-3 bg-gray-900 hover:bg-black text-white px-10 py-4 rounded-full font-semibold transition-all shadow-xl group relative z-10">
               <FaWhatsapp size={20} className="group-hover:scale-110 transition-transform" />
               <span>Message Concierge</span>
             </a>

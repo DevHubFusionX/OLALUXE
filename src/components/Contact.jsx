@@ -28,7 +28,7 @@ const Contact = () => {
                   </div>
                   <div>
                     <p className="font-bold text-gray-900 uppercase text-xs tracking-widest mb-1">WhatsApp Concierge</p>
-                    <p className="text-gray-600 text-lg">+234 912 049 1702</p>
+                    <p className="text-gray-600 text-lg">+234 913 413 6404</p>
                     <p className="text-xs text-gray-400 mt-1 italic tracking-wide">Instant assistance & custom orders</p>
                   </div>
                 </div>

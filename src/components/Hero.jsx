@@ -22,7 +22,7 @@ const Hero = () => {
             </p>
 
             <div className="flex flex-col gap-4">
-              <a href="https://wa.me/2349120491702" className="bg-white text-gray-900 px-10 py-4 rounded-full font-semibold shadow-xl transition-all flex items-center justify-center space-x-3 group">
+              <a href="https://wa.me/2349134136404" className="bg-white text-gray-900 px-10 py-4 rounded-full font-semibold shadow-xl transition-all flex items-center justify-center space-x-3 group">
                 <FaWhatsapp size={20} className="group-hover:scale-110 transition-transform" />
                 <span>Order Now</span>
               </a>
@@ -52,7 +52,7 @@ const Hero = () => {
                 </p>
 
                 <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                  <a href="https://wa.me/2349120491702" className="bg-gray-900 hover:bg-black text-white px-10 py-4 rounded-full font-semibold shadow-xl transition-all flex items-center justify-center space-x-3 group">
+                  <a href="https://wa.me/2349134136404" className="bg-gray-900 hover:bg-black text-white px-10 py-4 rounded-full font-semibold shadow-xl transition-all flex items-center justify-center space-x-3 group">
                     <FaWhatsapp size={20} className="group-hover:scale-110 transition-transform" />
                     <span>Order Now</span>
                   </a>

@@ -61,7 +61,7 @@ const ComboDetails = () => {
   const handleWhatsAppOrder = () => {
     const colorText = selectedColor ? ` in ${selectedColor.name}` : '';
     const message = `Hi, I'm interested in the ${combo.name}${colorText} combo for ${combo.comboPrice}`;
-    window.open(`https://wa.me/2349120491702?text=${encodeURIComponent(message)}`, '_blank');
+    window.open(`https://wa.me/2349134136404?text=${encodeURIComponent(message)}`, '_blank');
   };
 
   const handleColorSelect = (color) => {
