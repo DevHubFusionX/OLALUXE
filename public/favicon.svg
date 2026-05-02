@@ -1,4 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-  <circle cx="50" cy="50" r="45" fill="#16a34a"/>
-  <text x="50" y="60" font-family="Inter, Arial, sans-serif" font-size="30" font-weight="bold" fill="white" text-anchor="middle">MT</text>
+  <defs>
+    <linearGradient id="favGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FBC4AB;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#D4AF37;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <circle cx="50" cy="50" r="48" fill="url(#favGrad)" />
+  <circle cx="50" cy="50" r="42" fill="white" />
+  <text x="50" y="65" font-family="'Playfair Display', serif" font-size="45" font-weight="700" fill="url(#favGrad)" text-anchor="middle">O</text>
 </svg>
